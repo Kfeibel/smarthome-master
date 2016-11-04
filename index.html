@@ -50,6 +50,7 @@
       canvas.height = parseInt(canvas.style.height);
       
       navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
       if (navigator.getUserMedia){
         
         function successCallback(stream){
@@ -65,6 +66,23 @@
         function errorCallback(error){
         	console.log(error);
         }
+
+
+		/*if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+  			console.log("enumerateDevices() not supported.");
+  			return;
+		 }
+		// List cameras and microphones.
+
+		navigator.mediaDevices.enumerateDevices().then(function(devices) {
+    		devices.forEach(function(device) {
+      			console.log(device.kind + ": " + device.label +
+        		" id = " + device.deviceId);
+    		});
+  		}).catch(function(err) {
+    		console.log(err.name + ": " + error.message);
+  		});*/
+
         
         navigator.getUserMedia({ video: {facingMode: "environment"} }, successCallback, errorCallback);
         
@@ -123,9 +141,6 @@
     function drawId(markers){
       var corners, corner, x, y, i, j;
       
-      context.strokeStyle = "blue";
-      context.lineWidth = 1;
-      
       for (i = 0; i !== markers.length; ++ i){
         corners = markers[i].corners;
         
@@ -141,10 +156,36 @@
 
         
         if( typeof items[markers[i].id] != 'undefined'){
-        	context.strokeText(items[markers[i].id].functions[0], x, y)
+
+        	var text = items[markers[i].id].name;
+        	var length = text.length;
+
+        	context.font = "20pt Arial";
+			
+			var txtHeight = parseInt(context.font);
+			
+			context.beginPath();
+      		context.rect(x - 3, y - txtHeight + 4 , context.measureText(text).width + 10, txtHeight + 3 );
+      		context.fillStyle = 'white';
+      		context.fill();
+      		context.lineWidth = 1;
+      		context.strokeStyle = '#000000';
+      		context.stroke();
+
+        	var gradient = context.createLinearGradient(0, 0, canvas.width, 0);
+	  		gradient.addColorStop("0", "green");
+	  		gradient.addColorStop("0.5", "blue");
+	  		gradient.addColorStop("1.0", "red");
+	  		
+			context.lineWidth = 1;
+	  		context.fillStyle = '#595959';
+        	context.fillText(text, x, y)
 
         } else{
-        	context.strokeText(markers[i].id, x, y)
+        	context.font = "10pt Arial";
+        	context.strokeStyle = "blue";
+      		context.lineWidth = 1;
+        	context.fillText(markers[i].id, x, y)
         }
       }
     }
