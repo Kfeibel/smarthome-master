@@ -7,11 +7,41 @@
   
   <script type="text/javascript" src="cv.js"></script> 
   <script type="text/javascript" src="aruco.js"></script> 
+  <script type="text/javascript" src="device.js"></script> 
 
   <script>
-    var video, canvas, context, imageData, detector;
+    var video, canvas, context, imageData, detector, items;
+
+    window.onload = function(){
+    	
+    	items = new Array(1024);
+    	devices = getAllDevices();
+    	
+    	for (var i =  0; i < devices.length; i++) {
+    		//console.log(i, devices[i].id);
+    		if(devices[i].id != -1){
+    			items[devices[i].id] = devices[i];
+    		}
+    	}
+    	//console.log(items);
+    }
+
+    function getAllDevices(){
+    	
+    	var device1 = new Device('Stehlampe Wohnzimmer', ['An', 'Aus', 'Dimmen', 'Farbe']);
+    	device1.setID(34);
+    	var device2 = new Device('Lampe Bad', ['An', 'Aus', 'Dimmen']);
+    	device2.setID(555);
+    	var device3 = new Device('Heizung Küche', ['Wärmer', 'Kälter', 'Temperatur']);
+    	device3.setID(1023);
+		var device4 = new Device('Heizung Wohnzimmer', ['Wärmer', 'Kälter', 'Temperatur']);
+		device4.setID(70);
+	
+		return [device1,device2,device3,device4];
+    }
+
   
-    function onLoad(){
+    function startStream(){
       video = document.getElementById("video");
       canvas = document.getElementById("canvas");
       context = canvas.getContext("2d");
@@ -33,15 +63,17 @@
         }
         
         function errorCallback(error){
+        	console.log(error);
         }
         
-        navigator.getUserMedia({video: true}, successCallback, errorCallback);
+        navigator.getUserMedia({video: { facingMode: "environment" }}, successCallback, errorCallback);
         
         detector = new AR.Detector();
-
+    
         requestAnimationFrame(tick);
       }
     }
+    
     
     function tick(){
       requestAnimationFrame(tick);
@@ -50,8 +82,10 @@
         snapshot();
 
         var markers = detector.detect(imageData);
+
         drawCorners(markers);
         drawId(markers);
+        
       }
     }
 
@@ -105,11 +139,17 @@
           y = Math.min(y, corner.y);
         }
 
-        context.strokeText(markers[i].id, x, y)
+        
+        if( typeof items[markers[i].id] != 'undefined'){
+        	context.strokeText(items[markers[i].id].functions[0], x, y)
+
+        } else{
+        	context.strokeText(markers[i].id, x, y)
+        }
       }
     }
 
-    window.onload = onLoad;
+    //window.onload = onLoad;
   </script>
 
 </head>
@@ -118,9 +158,14 @@
 
   <center>
     <div style="margin: 10px;"><strong>-= Augmented Reality Marker Detector =-</strong></div>
-    <video id="video" autoplay="true" style="display:none;"></video>
-    <canvas id="canvas" style="width:640px; height:480px;"></canvas>
+    <button onclick="startStream()">Starte Erkennung</button>
+    <button onclick="startStream()">Beende Erkennung</button>
   </center>
+  <center>
+  <video id="video" autoplay="true" style="display:none;"></video>
+  <canvas id="canvas" style="width:900px; height:600px;"></canvas>
+  </center>
+
 
 </body>
   
