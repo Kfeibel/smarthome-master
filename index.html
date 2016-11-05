@@ -4,13 +4,13 @@
   <title>Augmented Reality Marker Detector</title>
 
   <script type="text/javascript" src="libs/polyfill.js"></script> 
-  
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
   <script type="text/javascript" src="cv.js"></script> 
   <script type="text/javascript" src="aruco.js"></script> 
   <script type="text/javascript" src="device.js"></script> 
 
   <script>
-    var video, canvas, context, imageData, detector, items;
+    var video, canvas, context, imageData, detector, items, rectPos = new Array, index;
 
     window.onload = function(){
     	
@@ -23,7 +23,21 @@
     			items[devices[i].id] = devices[i];
     		}
     	}
-    	//console.log(items);
+    	$('#canvas').click(function(e) {
+    	var x = e.offsetX,
+        	y = e.offsetY;
+
+        	for(var j=0;j<rectPos.length;j++) {
+        		if(x > rectPos[j][0]
+        		&& x < rectPos[j][0] + rectPos[j][2]
+        		&& y > rectPos[j][1]
+        		&& y < rectPos[j][1] + rectPos[j][3]) {
+            		alert('Aktion: ' + rectPos[j][4] + ' von Geräte mit der ID: ' + rectPos[j][5]);
+        		}
+    		}
+    
+    	});
+    	
     }
 
     function getAllDevices(){
@@ -102,7 +116,7 @@
         var markers = detector.detect(imageData);
 
         drawCorners(markers);
-        drawId(markers);
+        drawIdOrName(markers);
         
       }
     }
@@ -138,57 +152,89 @@
       }
     }
 
-    function drawId(markers){
-      var corners, corner, x, y, i, j;
+    function drawIdOrName(markers){
+      var corners, corner, xMin, yMin, xMax, yMax, i, j, k;
+      index = 0;
+      rectPos = [];
       
       for (i = 0; i !== markers.length; ++ i){
         corners = markers[i].corners;
         
-        x = Infinity;
-        y = Infinity;
+        xMin = Infinity;
+        yMin = Infinity;
+        xMax = 0;
+        yMax = 0;
         
         for (j = 0; j !== corners.length; ++ j){
           corner = corners[j];
           
-          x = Math.min(x, corner.x);
-          y = Math.min(y, corner.y);
+          xMin = Math.min(xMin, corner.x);
+          yMin = Math.min(yMin, corner.y);
+
+          xMax = Math.max(xMax, corner.x);
+          yMax = Math.max(yMax, corner.y);
         }
 
         
         if( typeof items[markers[i].id] != 'undefined'){
 
         	var text = items[markers[i].id].name;
-        	var length = text.length;
-
-        	context.font = "20pt Arial";
-			
+        	context.font = "20px Verdana";			
 			var txtHeight = parseInt(context.font);
-			
-			context.beginPath();
-      		context.rect(x - 3, y - txtHeight + 4 , context.measureText(text).width + 10, txtHeight + 3 );
-      		context.fillStyle = 'white';
-      		context.fill();
-      		context.lineWidth = 1;
-      		context.strokeStyle = '#000000';
-      		context.stroke();
-
-        	var gradient = context.createLinearGradient(0, 0, canvas.width, 0);
-	  		gradient.addColorStop("0", "green");
-	  		gradient.addColorStop("0.5", "blue");
-	  		gradient.addColorStop("1.0", "red");
-	  		
-			context.lineWidth = 1;
-	  		context.fillStyle = '#595959';
-        	context.fillText(text, x, y)
+        	drawRect(text, xMin, yMin);
+        	
+        	for(k = 0; k !== items[markers[i].id].functions.length; k++ ){
+        		//console.log(items[markers[i].id].functions[k]);
+        		text = items[markers[i].id].functions[k];
+        		drawRect(text, xMax, ((k+1) * 28 +  yMin) , 1, markers[i].id);
+        	}
 
         } else{
-        	context.font = "10pt Arial";
-        	context.strokeStyle = "blue";
+        	context.font = "10px Verdana";
+        	context.fillStyle = "red";
       		context.lineWidth = 1;
-        	context.fillText(markers[i].id, x, y)
+        	context.fillText(markers[i].id, xMin, yMin - 5 )
         }
       }
     }
+
+    function drawRect(text, x, y, type, id){
+    	var type = type || 0;
+		var length = text.length;
+
+       	context.font = "20px Verdana";
+		var txtHeight = parseInt(context.font);
+
+		context.beginPath();
+    	context.rect(x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 );
+
+    	if(type == 0){
+      	context.fillStyle = '#858585';
+     	context.fill();
+      	context.lineWidth = 1;
+      	context.strokeStyle = 'black';
+      	context.stroke();	
+
+	  	context.fillStyle = '#E8E8E8';
+        context.fillText(text, x, y)
+		}else{
+
+		rectPos[index] = [x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 , text , id ];
+		index++;
+		//console.log(rectPos);
+
+      	context.fillStyle = 'white';
+     	context.fill();
+      	context.lineWidth = 1;
+      	context.strokeStyle = 'black';
+      	context.stroke();	
+
+	  	context.fillStyle = '#595959';
+        context.fillText(text, x, y)
+		}
+    }
+
+
 
     //window.onload = onLoad;
   </script>
