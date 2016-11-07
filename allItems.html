@@ -1,0 +1,68 @@
+<html>
+
+<head>
+  <title>Liste der intelligenten Geräte</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/menu.css" rel="stylesheet">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="js/device.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/interface.js"></script>
+
+  <script>
+      
+     window.onload = function(){
+        var devices = getAllDevices();
+
+        for(var i = 0 ; i<devices.length ; i++){
+            createItem(devices[i]);
+        }
+
+     } 
+
+    function createItem(device){
+
+        var div = document.createElement("div");
+        div.setAttribute("class", "square");
+        div.setAttribute("id", device.id);
+        div.setAttribute("onclick", "changeId(this)");
+
+        var div2 = document.createElement("div");
+        div2.setAttribute("class", "content");
+
+        var div3 = document.createElement("div");
+        div3.setAttribute("class", "table");
+
+        var div4 = document.createElement("div");
+        div4.setAttribute("class", "table-cell");
+        if(device.id != -1){
+            div4.innerHTML = device.name +  '<br>' +'ID: ' + device.id;
+        }else{
+            div4.innerHTML = device.name +  '<br>' +'Keine ID hinterlegt';
+        }
+
+        div3.appendChild(div4);
+        div2.appendChild(div3);
+        div.appendChild(div2);
+        document.body.appendChild(div);
+    }
+
+    function changeId(item){
+        console.log(item);
+    }
+
+  </script>
+<!-- 1st row verticaly centered text in the square columns -->
+</head>
+
+<body style="font-family: arial;">
+<div id="headline">
+    <p>List of all know intelligent Items of the System. Click on them to controll them or give them an spezific ID<br/>
+        </p> 
+</div>
+
+
+</body>
+  
+</html>

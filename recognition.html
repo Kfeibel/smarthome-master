@@ -1,0 +1,246 @@
+<html>
+
+<head>
+  <title>Augmented Reality Marker Detector</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <script type="text/javascript" src="libs/polyfill.js"></script> 
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/javascript" src="js/cv.js"></script> 
+  <script type="text/javascript" src="js/interface.js"></script> 
+  <script type="text/javascript" src="js/aruco.js"></script> 
+  <script type="text/javascript" src="js/device.js"></script> 
+	<script src="js/bootstrap.min.js"></script>
+  <script>
+    var video, canvas, context, imageData, detector, items, rectPos = new Array, index;
+
+    window.onload = function(){
+    	
+    	items = new Array(1024);
+    	var devices = getAllDevices();
+    	
+    	for (var i =  0; i < devices.length; i++) {
+    		//console.log(i, devices[i].id);
+    		if(devices[i].id != -1){
+    			items[devices[i].id] = devices[i];
+    		}
+    	}
+    	$('#canvas').click(function(e) {
+    	var x = e.offsetX,
+        	y = e.offsetY;
+
+        	for(var j=0;j<rectPos.length;j++) {
+        		if(x > rectPos[j][0]
+        		&& x < rectPos[j][0] + rectPos[j][2]
+        		&& y > rectPos[j][1]
+        		&& y < rectPos[j][1] + rectPos[j][3]) {
+            		alert('Aktion: ' + rectPos[j][4] + ' von Geräte mit der ID: ' + rectPos[j][5] + items[rectPos[j][5]].name);
+        		}
+    		}
+    
+    	});
+    	
+    }
+  
+    function startStream(){
+      video = document.getElementById("video");
+      canvas = document.getElementById("canvas");
+      context = canvas.getContext("2d");
+    
+      canvas.width = parseInt(canvas.style.width);
+      canvas.height = parseInt(canvas.style.height);
+      
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+      if (navigator.getUserMedia){
+        
+        function successCallback(stream){
+          if (window.URL) {
+            video.src = window.URL.createObjectURL(stream);
+          } else if (video.mozSrcObject !== undefined) {
+            video.mozSrcObject = stream;
+          } else {
+            video.src = stream;
+          }
+        }
+        
+        function errorCallback(error){
+        	console.log(error);
+        }
+
+
+		/*if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+  			console.log("enumerateDevices() not supported.");
+  			return;
+		 }
+		// List cameras and microphones.
+
+		navigator.mediaDevices.enumerateDevices().then(function(devices) {
+    		devices.forEach(function(device) {
+      			console.log(device.kind + ": " + device.label +
+        		" id = " + device.deviceId);
+    		});
+  		}).catch(function(err) {
+    		console.log(err.name + ": " + error.message);
+  		});*/
+
+        
+        navigator.getUserMedia({ video: {facingMode: "environment"} }, successCallback, errorCallback);
+        
+        detector = new AR.Detector();
+    
+        requestAnimationFrame(tick);
+      }
+    }
+    
+    
+    function tick(){
+      requestAnimationFrame(tick);
+      
+      if (video.readyState === video.HAVE_ENOUGH_DATA){
+        snapshot();
+
+        var markers = detector.detect(imageData);
+
+        drawCorners(markers);
+        drawIdOrName(markers);
+        
+      }
+    }
+
+    function snapshot(){
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    }
+          
+    function drawCorners(markers){
+      var corners, corner, i, j;
+    
+      context.lineWidth = 3;
+
+      for (i = 0; i !== markers.length; ++ i){
+        corners = markers[i].corners;
+        
+        context.strokeStyle = "red";
+        context.beginPath();
+        
+        for (j = 0; j !== corners.length; ++ j){
+          corner = corners[j];
+          context.moveTo(corner.x, corner.y);
+          corner = corners[(j + 1) % corners.length];
+          context.lineTo(corner.x, corner.y);
+        }
+
+        context.stroke();
+        context.closePath();
+        
+        context.strokeStyle = "green";
+        context.strokeRect(corners[0].x - 2, corners[0].y - 2, 4, 4);
+      }
+    }
+
+    function drawIdOrName(markers){
+      var corners, corner, xMin, yMin, xMax, yMax, i, j, k;
+      index = 0;
+      rectPos = [];
+      
+      for (i = 0; i !== markers.length; ++ i){
+        corners = markers[i].corners;
+        
+        xMin = Infinity;
+        yMin = Infinity;
+        xMax = 0;
+        yMax = 0;
+        
+        for (j = 0; j !== corners.length; ++ j){
+          corner = corners[j];
+          
+          xMin = Math.min(xMin, corner.x);
+          yMin = Math.min(yMin, corner.y);
+
+          xMax = Math.max(xMax, corner.x);
+          yMax = Math.max(yMax, corner.y);
+        }
+
+        
+        if( typeof items[markers[i].id] != 'undefined'){
+
+        	var text = items[markers[i].id].name;
+        	context.font = "20px Verdana";			
+			var txtHeight = parseInt(context.font);
+        	drawRect(text, xMin, yMin);
+        	
+        	for(k = 0; k !== items[markers[i].id].functions.length; k++ ){
+        		//console.log(items[markers[i].id].functions[k]);
+        		text = items[markers[i].id].functions[k];
+        		drawRect(text, xMax, ((k+1) * 28 +  yMin) , 1, markers[i].id);
+        	}
+
+        } else{
+        	context.font = "10px Verdana";
+        	context.fillStyle = "red";
+      		context.lineWidth = 1;
+        	context.fillText(markers[i].id, xMin, yMin - 5 )
+        }
+      }
+    }
+
+    function drawRect(text, x, y, type, id){
+    	var type = type || 0;
+		var length = text.length;
+
+       	context.font = "20px Verdana";
+		var txtHeight = parseInt(context.font);
+
+		context.beginPath();
+    	context.rect(x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 );
+
+    	if(type == 0){
+      	context.fillStyle = '#858585';
+     	context.fill();
+      	context.lineWidth = 1;
+      	context.strokeStyle = 'black';
+      	context.stroke();	
+
+	  	context.fillStyle = '#E8E8E8';
+        context.fillText(text, x, y)
+		}else{
+
+		rectPos[index] = [x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 , text , id ];
+		index++;
+		//console.log(rectPos);
+
+      	context.fillStyle = 'white';
+     	context.fill();
+      	context.lineWidth = 1;
+      	context.strokeStyle = 'black';
+      	context.stroke();	
+
+	  	context.fillStyle = '#595959';
+        context.fillText(text, x, y)
+		}
+    }
+
+
+
+    //window.onload = onLoad;
+  </script>
+
+</head>
+
+<body style="font-family: arial;">
+
+  <center>
+    <div style="margin: 10px;"><strong>-= Augmented Reality Marker Detector =-</strong></div>
+    <button onclick="startStream()">Starte Erkennung</button>
+    <button onclick="startStream()">Beende Erkennung</button>
+  </center>
+  <center>
+  <video id="video" autoplay="true" style="display:none;"></video>
+  <canvas id="canvas" style="width:600px; height:400px;"></canvas>
+  </center>
+
+
+</body>
+  
+</html>
