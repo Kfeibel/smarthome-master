@@ -56,13 +56,13 @@ li{
 }
 
 .img1{
-    background-image: url('/assets/items.jpg');
+    background-image: url('../assets/items.jpg');
 }
 .img2{
-    background-image: url('/assets/aug.png');
+    background-image: url('../assets/aug.png');
 }
 .img3{
-    background-image: url('https://farm4.staticflickr.com/3794/13893055574_3df0ab636b.jpg');
+    background-image: url('');
 }
 
 /*  following just for the demo */

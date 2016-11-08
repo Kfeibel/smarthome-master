@@ -211,7 +211,13 @@
 		//console.log(rectPos);
 
       	context.fillStyle = 'white';
+      	context.shadowColor = 'black';
+      	context.shadowBlur = 15;
+      	context.shadowOffsetX = 7;
+      	context.shadowOffsetY = 7;
+      
      	context.fill();
+     	context.shadowColor = "transparent";
       	context.lineWidth = 1;
       	context.strokeStyle = 'black';
       	context.stroke();	
