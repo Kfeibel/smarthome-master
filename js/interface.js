@@ -1,12 +1,15 @@
 function init(){
-
+    console.log('test2');
     jQuery.get('json/devices.json', function(data) {
+        console.log('test3');
         console.log(data);
-    var jsonString = data ;
-    localStorage.setItem("jsonString", jsonString);
-    console.log(localStorage.getItem("jsonString"));
+        var jsonString = data ;
+
+        localStorage.setItem("jsonString", jsonString);
+        console.log(localStorage.getItem("jsonString"));
     //console.log(jsonString);
   });
+    console.log('test4');
 }
 
 
