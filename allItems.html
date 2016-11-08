@@ -2,19 +2,19 @@
 
 <head>
   <title>Liste der intelligenten Geräte</title>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/menu.css" rel="stylesheet">
-
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-  <script src="js/device.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <link href="css/menu.css" rel="stylesheet">
+  <script src="js/device.js"></script>
   <script src="js/interface.js"></script>
+  <script src="js/markers.js"></script>
+
 
   <script>
       
      window.onload = function(){
         var devices = getAllDevices();
-
         for(var i = 0 ; i<devices.length ; i++){
             createItem(devices[i]);
         }
@@ -22,11 +22,13 @@
      } 
 
     function createItem(device){
+        console.log(device);
 
         var div = document.createElement("div");
-        div.setAttribute("class", "square");
-        div.setAttribute("id", device.id);
-        div.setAttribute("onclick", "changeId(this)");
+        div.setAttribute("class", "square bg");
+        div.setAttribute("id", device.arucoid);
+        div.setAttribute("style", "background-image: url('../assets/background.jpg'" );
+        div.setAttribute("onclick", "openModal(this, '"+device.name+"')");
 
         var div2 = document.createElement("div");
         div2.setAttribute("class", "content");
@@ -36,8 +38,8 @@
 
         var div4 = document.createElement("div");
         div4.setAttribute("class", "table-cell");
-        if(device.id != -1){
-            div4.innerHTML = device.name +  '<br>' +'ID: ' + device.id;
+        if(device.arucoid !=  ""){
+            div4.innerHTML = device.name +  '<br>' +'ID: ' + device.arucoid;
         }else{
             div4.innerHTML = device.name +  '<br>' +'Keine ID hinterlegt';
         }
@@ -46,20 +48,82 @@
         div2.appendChild(div3);
         div.appendChild(div2);
         document.body.appendChild(div);
+
     }
 
-    function changeId(item){
-        console.log(item);
+    function openModal(item, name){
+        
+        $('.modal-title').text(name);
+
+        drawArucoMarker(item.id);   
+
+        $('#myModal').modal('toggle');
     }
+
+    function drawArucoMarker(itemId){
+
+        var canvas = document.getElementById('arucoCode');
+        canvas.width = $('.square').width();
+        canvas.height = $('.square').width();
+
+        if(itemId !=-1){
+            canvasBuffer  = makeMarker(itemId , $('.square').width()-30,$('.square').width()-30);
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(canvasBuffer, 0, 0);
+            $('#arucoID').val(itemId);
+            
+        } else{
+            $('#arucoID').val('');
+        }   
+
+    }
+
+    function check(){
+        console.log($('#arucoID').val());
+        
+        drawArucoMarker($('#arucoID').val());
+    }
+
+
 
   </script>
-<!-- 1st row verticaly centered text in the square columns -->
+
+
+
+
 </head>
 
 <body style="font-family: arial;">
 <div id="headline">
     <p>List of all know intelligent Items of the System. Click on them to controll them or give them an spezific ID<br/>
         </p> 
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <div>
+        <p id="arucoText">ID: </p>
+        <input id="arucoID" type="number" name="quantity" min="0" max="1023" onchange="check(this.value)">
+      </div>
+        
+        <canvas id="arucoCode"></canvas>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Bestätigen</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 

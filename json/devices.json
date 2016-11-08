@@ -1,0 +1,40 @@
+{
+	"Lampen" : [
+	   	{
+	   		"id" : "1",
+			"type" : "lamp",
+			"name" : "Lampe Bad",
+			"arucoid" : "1023",
+			"dim" : "100",
+			"color" : "#ffffcc",
+			"state" : "on"
+		},
+		{
+			"id" : "2",
+			"type" : "led",
+			"name" : "Stehlampe Wohnzimmer",
+			"arucoid" : "150",
+			"dim" : "50",
+			"color" : "#ffffcc",
+			"state" : "on"
+		}
+	],
+	"Heizungen" : [
+	   	{
+	   		"id" : "3",
+			"type" : "heater",
+			"name" : "Heizung Bad",
+			"arucoid" : "34",
+			"temperature" : "22",
+			"state" : "on"
+		},
+		{
+			"id" : "4",
+			"type" : "heater",
+			"name" : "Heizung Küche",
+			"arucoid" : "",
+			"temperature" : "18",
+			"state" : "on"
+		}
+	]
+}

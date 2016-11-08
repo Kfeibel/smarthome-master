@@ -7,6 +7,12 @@
     background-color:#1E1E1E;
     overflow:hidden;
     cursor: pointer;
+    font-size: 23px;
+    -moz-box-shadow:    5px 5px 5px 0px #292929;
+    -webkit-box-shadow: 5px 5px 5px 0px #292929;
+    box-shadow:         5px 5px 5px 0px #292929;
+
+
 }
 
 .content {
@@ -62,7 +68,10 @@ li{
     background-image: url('../assets/aug.png');
 }
 .img3{
-    background-image: url('');
+    background-image: url('../assets/microphone.jpg');
+}
+.img4{
+    background-image: url('../assets/log.jpg');
 }
 
 /*  following just for the demo */
@@ -81,6 +90,24 @@ p{
     text-align:left;
 }
 
+#myModal{
+    color: #3d3d3d;
+}
+#arucoCode{
+    border: solid 2px #CCC;
+    padding: 0px;
+}
+.modal-body p{
+    display: inline-block;
+
+    text-align: center;
+    margin-bottom: 10px;
+}
+#arucoID{
+    margin-left: 5px;
+    padding-left: 5px;
+}
+
 .numbers{
     font-weight:900;
     font-size:25px;
@@ -88,12 +115,13 @@ p{
 
 #headline {
     clear:both;
-    margin:0 1.66%;
+    margin:0 1.68%;
     width:96.64%;
     padding: 3.5%;
     background-color:#1E1E1E;
     color: #fff;
     margin-top: 10px;
+    font-size: 30px;
 }
 #headline p{
     text-align:center;
@@ -119,16 +147,32 @@ p{
 
 @media (max-width: 450px){
     .square {
-    width: 45%;
-    padding-bottom : 45%; /* = width for a 1:1 aspect ratio */
+        width: 45%;
+        padding-bottom : 45%; /* = width for a 1:1 aspect ratio */
+        margin: 2.5%;
+        font-size: 15px;
     }
 
     #headline {
-    clear:both;
-    margin:0 1.66%;
-    width:93.32%;
-    padding: 3.5%;
-    background-color:#1E1E1E;
-    color: #fff;
+        width:95%;
+        margin:0 2.5%;
+        margin-top: 10px;
+        font-size: 20px;
+    }
 }
+@media (min-width: 1024px){
+    .square {
+    width: 22.5%;
+    padding-bottom : 22.5%; /* = width for a 1:1 aspect ratio */
+    margin:1.25%;
+    font-size: 30px;
+    }
+
+    #headline {
+        margin:0 1.25%;
+        width:97.5%;
+        padding: 3.5%;
+        margin-top: 10px;
+        font-size: 40px;
+    }
 }

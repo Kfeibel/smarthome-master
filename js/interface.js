@@ -1,13 +1,70 @@
+function init(){
+
+    jQuery.get('json/devices.json', function(data) {
+    var jsonString = data ;
+    localStorage.setItem("jsonString", jsonString);
+
+  });
+}
+
+
+function update(){
+     localStorage.getItem("jsonString");
+}
+
+
+function get(){
+     var jsObject = JSON.parse( localStorage.getItem("jsonString") );
+
+    return jsObject;
+}
+
+
+function store(){
+    var data = new FormData();
+    data.append("data" , localStorage.getItem("jsonString"));
+    var xhr = new XMLHttpRequest(); 
+    xhr.open( 'post', 'json/devices.json', true );
+    xhr.send(data);
+}
+
+function createObjektArray(o) {
+   var devices = new Array;
+   var count = 0; 
+    for (i in o) {
+        if (!!o[i] && typeof(o[i])=="object") {
+            for (var j = 0; j < o[i].length ; j++) {
+                
+                if( o[i][j].type == 'lamp'){
+                
+                    var singleDevice = new Lamp(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,o[i][j].dim, o[i][j].color, o[i][j].state, ['An', 'Aus']);
+                    devices[count]= singleDevice;
+                    count++;
+                }else
+                if( o[i][j].type == 'led'){
+                
+                    var singleDevice = new Lamp(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,o[i][j].dim, o[i][j].color, o[i][j].state, ['An', 'Aus', 'Dimmen', 'Farbe']);
+                    devices[count]= singleDevice;
+                    count++;
+                }else
+                if( o[i][j].type == 'heater'){
+                    var singleDevice = new Heater(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,o[i][j].temperature, o[i][j].state, ['An', 'Aus', 'Temperatur', 'Wärmer', 'Kälter']);
+                    devices[count]= singleDevice;
+                    count++;
+                }
+            }
+        }
+    }
+    console.log(devices);
+    return devices;
+}  
+
+
 function getAllDevices(){
-    	
-    	var device1 = new Device('Stehlampe Wohnzimmer', ['An', 'Aus', 'Dimmen', 'Farbe']);
-    	device1.setID(34);
-    	var device2 = new Device('Lampe Bad', ['An', 'Aus', 'Dimmen']);
-    	device2.setID(555);
-    	var device3 = new Device('Heizung Küche', ['Wärmer', 'Kälter', 'Temperatur']);
-    	device3.setID(1023);
-		var device4 = new Device('Heizung Wohnzimmer', ['Wärmer', 'Kälter', 'Temperatur']);
-		
-	
-		return [device1,device2,device3,device4];
+        var devices = new Array;
+        var jsObject = get();
+        var count = 0;
+        devices = createObjektArray(jsObject, count);
+        
+		return devices;
     }
