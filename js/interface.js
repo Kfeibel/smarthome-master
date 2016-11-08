@@ -3,7 +3,7 @@ function init(){
     jQuery.get('json/devices.json', function(data) {
     var jsonString = data ;
     localStorage.setItem("jsonString", jsonString);
-    console.log(jsonString);
+    //console.log(jsonString);
   });
 }
 
