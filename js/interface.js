@@ -1,6 +1,7 @@
 function init(){
 
     jQuery.get('json/devices.json', function(data) {
+        console.log(data);
     var jsonString = data ;
     localStorage.setItem("jsonString", jsonString);
     console.log(localStorage.getItem("jsonString"));
