@@ -2,13 +2,15 @@ function initObjects(){
     console.log('test2');
     jQuery.get('json/devices.json', function(data) {
         console.log('test3');
+
         var jsonString = JSON.stringify(data) ;
+
         console.log(data);
-        
 
         localStorage.setItem("jsonString", jsonString);
+
         console.log(JSON.parse( localStorage.getItem("jsonString") ));
-    //console.log(jsonString);
+        console.log(jsonString);
   });
     console.log('test4');
 }
