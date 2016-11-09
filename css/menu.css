@@ -62,16 +62,16 @@ li{
 }
 
 .img1{
-    background-image: url('../assets/items.jpg');
+    background-image: url('../img/items.jpg');
 }
 .img2{
-    background-image: url('../assets/ar.jpg');
+    background-image: url('../img/ar.jpg');
 }
 .img3{
-    background-image: url('../assets/microphone.jpg');
+    background-image: url('../img/microphone.jpg');
 }
 .img4{
-    background-image: url('../assets/log.jpg');
+    background-image: url('../img/log.jpg');
 }
 
 /*  following just for the demo */
