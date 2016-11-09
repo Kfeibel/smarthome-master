@@ -1,4 +1,24 @@
 function initObjects(){
+
+    $.ajax({
+   url: 'json/devices.json',
+   data: {
+      format: 'string'
+   },
+   error: function() {
+        console.log('Fehler');
+   },
+   dataType: 'json',
+   success: function(data) {
+
+        var jsonString = JSON.stringify(data) ;
+
+        localStorage.setItem("jsonString", jsonString);
+   },
+   type: 'GET'
+});
+
+/*
     console.log('test2');
     jQuery.get('json/devices.json', function(data) {
         console.log('test3');
@@ -11,8 +31,7 @@ function initObjects(){
 
         console.log(JSON.parse( localStorage.getItem("jsonString") ));
         console.log(jsonString);
-  });
-    console.log('test4');
+  });*/
 }
 
 
@@ -63,7 +82,7 @@ function createObjektArray(o) {
             }
         }
     }
-    console.log(devices);
+    //console.log(devices);
     return devices;
 }  
 
