@@ -1,4 +1,4 @@
-function init(){
+function initObjects(){
     console.log('test2');
     jQuery.get('json/devices.json', function(data) {
         console.log('test3');
