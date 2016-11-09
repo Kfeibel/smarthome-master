@@ -35,24 +35,45 @@ function initObjects(){
 }
 
 
-function update(){
-     localStorage.getItem("jsonString");
+function updateArucoId(oldid , newid, itemid){
+    var jsObject = JSON.parse( localStorage.getItem("jsonString") );
+    jsObject = getObjects(jsObject, 'id', itemid, newid , 'arucoid');
+    var jsonString = JSON.stringify(jsObject) ;
+    localStorage.setItem("jsonString", jsonString);
+    store();
 }
 
 
 function get(){
      var jsObject = JSON.parse( localStorage.getItem("jsonString") );
-
     return jsObject;
 }
 
 
 function store(){
-    var data = new FormData();
-    data.append("data" , localStorage.getItem("jsonString"));
-    var xhr = new XMLHttpRequest(); 
-    xhr.open( 'post', 'json/devices.json', true );
-    xhr.send(data);
+    $.ajax({
+    type : "POST",
+    url : "php/ajax.php",
+    data : {
+        json : localStorage.getItem("jsonString")
+    }
+});
+   
+    console.log(localStorage.getItem("jsonString"));
+}
+
+function getObjects(obj, key, val, newVal , changeVal) {
+    var newValue = newVal;
+    var objects = [];
+    for (var i in obj) {
+        if (!obj.hasOwnProperty(i)) continue;
+        if (typeof obj[i] == 'object') {
+            objects = objects.concat(getObjects(obj[i], key, val, newValue, changeVal));
+        } else if (i == key && obj[key] == val) {
+            obj[changeVal] = newValue;
+        }
+    }
+    return obj;
 }
 
 function createObjektArray(o) {

@@ -103,10 +103,18 @@ p{
     text-align: center;
     margin-bottom: 10px;
 }
+.modal-body a{
+    font-size: smaller;
+}
 #arucoID{
     margin-left: 5px;
     padding-left: 5px;
 }
+#infoText{
+    margin-top: 10px;
+    font-size: small;
+}
+
 
 .numbers{
     font-weight:900;

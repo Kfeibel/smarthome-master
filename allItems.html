@@ -28,7 +28,7 @@
         div.setAttribute("class", "square bg");
         div.setAttribute("id", device.arucoid);
         div.setAttribute("style", "background-image: url('img/background.jpg'" );
-        div.setAttribute("onclick", "openModal(this, '"+device.name+"')");
+        div.setAttribute("onclick", "openModal(this, '"+device.name+"' , '"+device.id +"')");
 
         var div2 = document.createElement("div");
         div2.setAttribute("class", "content");
@@ -51,12 +51,12 @@
 
     }
 
-    function openModal(item, name){
-        
+    function openModal(item, name, itemid){
         $('.modal-title').text(name);
 
         drawArucoMarker(item.id);   
-
+        $('#myModal').attr('arucoid',item.id);
+        $('#myModal').attr('itemid',itemid);
         $('#myModal').modal('toggle');
     }
 
@@ -66,7 +66,7 @@
         canvas.width = $('.square').width();
         canvas.height = $('.square').width();
 
-        if(itemId !=-1){
+        if(itemId != ""){
             canvasBuffer  = makeMarker(itemId , $('.square').width()-30,$('.square').width()-30);
             var ctx = canvas.getContext('2d');
             ctx.drawImage(canvasBuffer, 0, 0);
@@ -79,9 +79,19 @@
     }
 
     function check(){
-        console.log($('#arucoID').val());
+        //console.log($('#arucoID').val());
         
         drawArucoMarker($('#arucoID').val());
+    }
+
+    function changeArucoMarker(){
+        var itemid = $('#myModal').attr('itemid');
+        var oldid = $('#myModal').attr('arucoid');
+        var newid = $('#arucoID').val();
+
+        updateArucoId(oldid, newid, itemid);
+
+        location.reload();
     }
 
 
@@ -110,15 +120,19 @@
       </div>
       <div class="modal-body">
         <div>
-        <p id="arucoText">ID: </p>
-        <input id="arucoID" type="number" name="quantity" min="0" max="1023" onchange="check(this.value)">
-      </div>
+            <p id="arucoText">ID: </p>
+            <input id="arucoID" type="number" name="quantity" min="0" max="1023" onchange="check(this.value)">
+        
+        </div>
         
         <canvas id="arucoCode"></canvas>
+        <p id="infoText">Der dargestellte Marker kann abgespeichert und ausgedruckt werden, um in an das entsprechende Geräte anzubringen. Falls die größe nicht den vorstellungen entsprcht kann auf folgender Seite ein belibig großer marker erstellt werden:</p>
+        <a href="http://terpconnect.umd.edu/~jwelsh12/enes100/markergen.html" target="_blank"> Marker Erstellen</a>  
         
       </div>
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Bestätigen</button>
+        <button type="button" class="btn btn-default" onclick="changeArucoMarker()" data-dismiss="modal">Bestätigen</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
