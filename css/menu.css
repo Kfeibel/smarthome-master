@@ -90,6 +90,23 @@ p{
     text-align:left;
 }
 
+#backbutton {
+    position: fixed;
+    top: 0px;
+    left: 0px; 
+    background-color: #202042;
+    color: white;
+    border: 2px solid #202042;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+#backbutton:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #202042;
+}
+
 #myModal{
     color: #3d3d3d;
 }
@@ -151,6 +168,14 @@ p{
 #headline a:hover{
     background:#ECECEC;
     border:1px solid #fff;
+}
+
+#streamButtondiv{
+    margin: 10px;
+    color: #424242;
+}
+.arStartButtons{
+    margin: 5px;
 }
 
 @media (max-width: 450px){

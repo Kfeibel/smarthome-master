@@ -11,8 +11,10 @@
   <script type="text/javascript" src="js/aruco.js"></script> 
   <script type="text/javascript" src="js/device.js"></script> 
 	<script src="js/bootstrap.min.js"></script>
+  <link href="css/menu.css" rel="stylesheet">
+
   <script>
-    var video, canvas, context, imageData, detector, items, rectPos = new Array, index;
+    var video, track, canvas, context, imageData, detector, items, rectPos = new Array, index;
 
     window.onload = function(){
     	
@@ -45,6 +47,7 @@
     function startStream(){
       video = document.getElementById("video");
       canvas = document.getElementById("canvas");
+      canvas.style.visibility = "visible" ;
       context = canvas.getContext("2d");
     
       canvas.width = parseInt(canvas.style.width);
@@ -57,10 +60,16 @@
         function successCallback(stream){
           if (window.URL) {
             video.src = window.URL.createObjectURL(stream);
+            track = stream.getTracks()[0];;
+            console.log(stream, track);
           } else if (video.mozSrcObject !== undefined) {
             video.mozSrcObject = stream;
+            track = stream.getTracks()[0];;
+            console.log(stream, track);
           } else {
             video.src = stream;
+            track = stream.getTracks()[0];
+            console.log(stream, track);
           }
         }
         
@@ -91,6 +100,12 @@
     
         requestAnimationFrame(tick);
       }
+    }
+
+    function stopStream(){
+      track.stop();
+      document.getElementById("canvas").style.visibility = "hidden" ;
+
     }
     
     
@@ -162,21 +177,19 @@
           yMax = Math.max(yMax, corner.y);
         }
 
-        console.log(items[markers[i].id]);
+        //console.log(items[markers[i].id]);
         if( typeof items[markers[i].id] != 'undefined'){
 
         	var text = items[markers[i].id].name;
         	context.font = "20px Verdana";			
-			var txtHeight = parseInt(context.font);
+			    var txtHeight = parseInt(context.font);
         	drawRect(text, xMin, yMin);
         	
         	for(k = 0; k !== items[markers[i].id].functions.length; k++ ){
-        		//console.log(items[markers[i].id].functions[k]);
-        		text = items[markers[i].id].functions[k];
-        		drawRect(text, xMax, ((k+1) * 28 +  yMin) , 1, markers[i].id);
-        	}
-
-        } else{
+        	  //console.log(items[markers[i].id].functions[k]);
+      		  text = items[markers[i].id].functions[k];
+      		  drawRect(text, xMax, ((k+1) * 28 +  yMin) , 1, markers[i].id);
+        	} else{
         	context.font = "10px Verdana";
         	context.fillStyle = "red";
       		context.lineWidth = 1;
@@ -187,28 +200,28 @@
 
     function drawRect(text, x, y, type, id){
     	var type = type || 0;
-		var length = text.length;
+		  var length = text.length;
 
-       	context.font = "20px Verdana";
-		var txtHeight = parseInt(context.font);
+      context.font = "20px Verdana";
+		  var txtHeight = parseInt(context.font);
 
-		context.beginPath();
+		  context.beginPath();
     	context.rect(x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 );
 
     	if(type == 0){
       	context.fillStyle = '#858585';
-     	context.fill();
+     	  context.fill();
       	context.lineWidth = 1;
       	context.strokeStyle = 'black';
       	context.stroke();	
 
-	  	context.fillStyle = '#E8E8E8';
+	  	  context.fillStyle = '#E8E8E8';
         context.fillText(text, x, y)
-		}else{
+		  }else{
 
-		rectPos[index] = [x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 , text , id ];
-		index++;
-		//console.log(rectPos);
+		    rectPos[index] = [x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 , text , id ];
+		    index++;
+		    //console.log(rectPos);
 
       	context.fillStyle = 'white';
       	context.shadowColor = 'black';
@@ -216,15 +229,15 @@
       	context.shadowOffsetX = 7;
       	context.shadowOffsetY = 7;
       
-     	context.fill();
-     	context.shadowColor = "transparent";
+     	  context.fill();
+     	  context.shadowColor = "transparent";
       	context.lineWidth = 1;
       	context.strokeStyle = 'black';
       	context.stroke();	
 
-	  	context.fillStyle = '#595959';
+	  	  context.fillStyle = '#595959';
         context.fillText(text, x, y)
-		}
+		  }
     }
 
 
@@ -235,11 +248,17 @@
 </head>
 
 <body style="font-family: arial;">
-
+<button id="backbutton" onclick="location.href='index.html'"> &lt&lt</button> 
   <center>
-    <div style="margin: 10px;"><strong>-= Augmented Reality Marker Detector =-</strong></div>
-    <button onclick="startStream()">Starte Erkennung</button>
-    <button onclick="startStream()">Beende Erkennung</button>
+
+    <div id="headline">
+    <p style="font-size: 20px">Steuerung per Augmented Reality:<br/>
+        </p> 
+    </div>
+    <div id="streamButtondiv">
+      <button class="arStartButtons" onclick="startStream()">Starte Erkennung</button>
+      <button class="arStartButtons" onclick="stopStream()">Beende Erkennung</button>
+    </div>
   </center>
   <center>
   <video id="video" autoplay="true" style="display:none;"></video>
