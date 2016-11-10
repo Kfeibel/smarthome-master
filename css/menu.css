@@ -103,6 +103,7 @@ p{
     transition-duration: 0.4s;
     width: 40px;
     height: 40px;
+    background-color: red;
 }
 
 #backbutton:hover {
@@ -181,6 +182,7 @@ p{
 .arStartButtons{
     margin: 5px;
     width: 40%;
+    background-color: green;
 }
 
 @media (max-width: 450px){
