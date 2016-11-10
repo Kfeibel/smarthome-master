@@ -30,10 +30,12 @@
     		}
     	}
     	$('#canvas').click(function(e) {
-    	var x = e.offsetX,
-        	y = e.offsetY;
+        var scaling = 900 / (window.innerWidth *0.9);
+    	var x = e.offsetX * scaling,
+        	y = e.offsetY * scaling;
 
-          console.log(x, y , rectPos);
+          
+          console.log(x, y , 900 / (window.innerWidth *0.9), rectPos);
 
         	for(var j=0;j<rectPos.length;j++) {
         		if(x > rectPos[j][0]
@@ -223,7 +225,8 @@
 
 	  	  context.fillStyle = '#E8E8E8';
         context.fillText(text, x, y)
-		  }else{
+		  }else{ 
+
 
 		    rectPos[index] = [x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 , text , id ];
 		    index++;
