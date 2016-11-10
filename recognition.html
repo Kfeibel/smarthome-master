@@ -54,10 +54,9 @@
       canvas.style.visibility = "visible" ;
       context = canvas.getContext("2d");
     
-      canvas.width = window.innerWidth *0.9;//parseInt(canvas.width);
-      console.log(canvas.width);
-      canvas.height = window.innerWidth * 0.5; //parseInt(canvas.height);
-      console.log(canvas.width, canvas.height);
+      canvas.width = parseInt(canvas.width);
+      canvas.height = parseInt(canvas.height);
+      
       navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
       if (navigator.getUserMedia){
@@ -269,7 +268,7 @@
   
   <center>
   <video id="video" autoplay="true" style="display:none;"></video>
-  <canvas id="canvas" ></canvas>
+  <canvas id="canvas" width="900" height="500" "></canvas>
   </center>
 
 
