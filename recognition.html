@@ -252,18 +252,18 @@
 </head>
 
 <body style="font-family: arial;">
-<button id="backbutton" onclick="location.href='index.html'"> &lt&lt</button> 
-  <center>
-
-    <div id="headline">
-    <p >Steuerung per Augmented Reality:<br/>
-        </p> 
+  <div id="headline">
+    <div class="buttonDiv">
+      <button class="backbutton" onclick="location.href='index.html'"> &lt&lt</button> 
     </div>
-    <div id="streamButtondiv">
-      <button class="arStartButtons" onclick="startStream()">Starte Erkennung</button>
-      <button class="arStartButtons" onclick="stopStream()">Beende Erkennung</button>
-    </div>
-  </center>
+    
+    <p >Steuerung per Augmented Reality:<br/></p> 
+  </div>
+  <div id="streamButtondiv">
+    <button class="arStartButtons" onclick="startStream()">Starte Erkennung</button>
+    <button class="arStartButtons" onclick="stopStream()">Beende Erkennung</button>
+  </div>
+  
   <center>
   <video id="video" autoplay="true" style="display:none;"></video>
   <canvas id="canvas" style="width:600px; height:400px;"></canvas>
