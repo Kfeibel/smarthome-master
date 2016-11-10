@@ -134,7 +134,7 @@ p{
     clear:both;
     margin:0 1.68%;
     width:96.64%;
-    padding: 3.5%;
+    padding: 3%;
     background-color:#1E1E1E;
     color: #fff;
     margin-top: 10px;
@@ -163,14 +163,14 @@ p{
 }
 .buttonDiv{
     float: left;
-    margin-top: -3.5%;
-    margin-left: -3.5%;
+    margin-top: -3%;
+    margin-left: -3%;
 }
 
 .backbutton {
-    background-color: #202042;
+    background-color: #23234c;
     color: white;
-    border: 2px solid #202042;
+    border: 2px solid: #23234c;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     font-size: 15px; 
@@ -180,7 +180,7 @@ p{
 .backbutton:hover {
     background-color: white;
     color: black;
-    border: 2px solid #202042;
+    border: 2px solid #23234c;
 }
 
 #streamButtondiv{
@@ -204,7 +204,6 @@ p{
     #headline {
         width:95%;
         margin:0 2.5%;
-        margin-top: 10px;
         font-size: 20px;
         padding: 2%;
     }
@@ -227,7 +226,10 @@ p{
         margin:0 1.25%;
         width:97.5%;
         padding: 3.5%;
-        margin-top: 10px;
-        font-size: 40px;
+        /*font-size: 40px;*/
     }
+    .buttonDiv{
+    float: left;
+    margin-top: -3.5%;
+    margin-left: -3.5%;
 }
