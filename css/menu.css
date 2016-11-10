@@ -175,6 +175,8 @@ p{
     transition-duration: 0.4s;
     font-size: 15px; 
     text-align: center;
+    width: 35px;
+    height: 35px;
 }
 
 .backbutton:hover {
@@ -183,15 +185,23 @@ p{
     border: 2px solid #23234c;
 }
 
+
+
 #streamButtondiv{
     margin: 10px;
     color: #424242;
-    font-size: 30px;
+    font-size: 20px;
 }
 .arStartButtons{
     margin: 5px;
     width: 40%;
 }
+
+#canvas{
+    width:90% !important; 
+    height:50vw !important;;
+}
+
 
 @media (max-width: 450px){
     .square {
@@ -212,7 +222,11 @@ p{
     float: left;
     margin-top: -2%;
     margin-left: -2%;
-}
+    }
+    #streamButtondiv{
+        font-size: 20px;
+    }
+    
 }
 @media (min-width: 1024px){
     .square {
@@ -225,11 +239,21 @@ p{
     #headline {
         margin:0 1.25%;
         width:97.5%;
-        padding: 3.5%;
+        padding: 3%;
         /*font-size: 40px;*/
     }
     .buttonDiv{
     float: left;
-    margin-top: -3.5%;
-    margin-left: -3.5%;
+    margin-top: -3%;
+    margin-left: -3%;
+    }
+   
 }
+
+
+
+
+
+
+
+
