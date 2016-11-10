@@ -33,6 +33,8 @@
     	var x = e.offsetX,
         	y = e.offsetY;
 
+          console.log(x, y , rectPos);
+
         	for(var j=0;j<rectPos.length;j++) {
         		if(x > rectPos[j][0]
         		&& x < rectPos[j][0] + rectPos[j][2]
@@ -52,9 +54,10 @@
       canvas.style.visibility = "visible" ;
       context = canvas.getContext("2d");
     
-      canvas.width = parseInt(canvas.style.width);
-      canvas.height = parseInt(canvas.style.height);
-      
+      canvas.width = window.innerWidth *0.9;//parseInt(canvas.width);
+      console.log(canvas.width);
+      canvas.height = window.innerWidth * 0.5; //parseInt(canvas.height);
+      console.log(canvas.width, canvas.height);
       navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
       if (navigator.getUserMedia){
@@ -266,7 +269,7 @@
   
   <center>
   <video id="video" autoplay="true" style="display:none;"></video>
-  <canvas id="canvas" width="900" height="500" style="width:900px; height:500px;"></canvas>
+  <canvas id="canvas" ></canvas>
   </center>
 
 
