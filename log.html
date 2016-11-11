@@ -1,0 +1,79 @@
+<html>
+
+<head>
+  <title>Log</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <script src="js/bootstrap.min.js"></script>
+  <link href="css/menu.css" rel="stylesheet">
+  <script src="js/device.js"></script>
+  <script src="js/interface.js"></script>
+
+  <script>
+      
+     window.onload = function(){
+        var devices = getAllDevices();
+        for(var i = 0 ; i<devices.length ; i++){
+            createItem(devices[i]);
+        }
+
+     } 
+
+    function createItem(device){
+
+      $("#myTextarea").val("Fifth Avenue, New York City");
+
+        //console.log(device);
+/*
+        var div = document.createElement("div");
+        div.setAttribute("class", "square bg");
+        div.setAttribute("id", device.arucoid);
+        div.setAttribute("style", "background-image: url('img/background.jpg'" );
+       
+
+        var div2 = document.createElement("div");
+        div2.setAttribute("class", "content");
+
+        var div3 = document.createElement("div");
+        div3.setAttribute("class", "table");
+
+        var div4 = document.createElement("div");
+        div4.setAttribute("class", "table-cell");
+        if(device.arucoid !=  ""){
+            div4.innerHTML = device.name +  '<br>' +'ID: ' + device.arucoid;
+        }else{
+            div4.innerHTML = device.name +  '<br>' +'Keine ID hinterlegt';
+        }
+
+        div3.appendChild(div4);
+        div2.appendChild(div3);
+        div.appendChild(div2);
+        document.body.appendChild(div);*/
+
+    }
+
+  </script>
+
+
+
+
+</head>
+
+<body style="font-family: arial;"> 
+<div id="headline">
+    
+    <div class="buttonDiv">
+        <button class="backbutton" onclick="location.href='index.html'"> &lt&lt</button> 
+    </div>
+    <p>Liste aller bekannten intelligente Geräte des Systems und ihre Einstellungen<br/> </p> 
+</div>
+
+<textarea id="myTextarea">
+</textarea>
+
+
+</body>
+  
+</html>

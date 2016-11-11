@@ -95,9 +95,6 @@ p{
 }
 
 
-
-
-
 #myModal{
     color: #3d3d3d;
 }
@@ -208,11 +205,39 @@ p{
     width: 40%;
 }
 
+
+#reactModal{
+    color: #333333;
+}
 #canvas{
     width:90vw !important; 
     height:50vw !important;;
 }
+#color{
+    display: none;
+    text-align: center;
+    color: #333333;
+    font-size: 20px;
+}
+#color input{
+    display: block;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 10px;
 
+}
+#dimmer{
+    display: none;
+}
+#temperature{
+    display: none;
+}
+
+
+#myTextarea{
+    color:  #333333;
+    margin: 10px;
+}
 
 @media (max-width: 450px){
     .square {

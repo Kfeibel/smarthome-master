@@ -17,7 +17,7 @@
   <link href="css/menu.css" rel="stylesheet">
 
   <script>
-    var video, track, canvas, context, imageData, detector, items, rectPos = new Array, index;
+    var video, track, canvas, context, imageData, detector, items, rectPos = new Array, index, chosenRect= -1;
 
     window.onload = function(){
     	
@@ -32,7 +32,7 @@
     	}
     	$('#canvas').click(function(e) {
         var scaling = 900 / (window.innerWidth *0.9);
-    	var x = e.offsetX * scaling,
+    	   var x = e.offsetX * scaling,
         	y = e.offsetY * scaling;
 
           
@@ -63,19 +63,71 @@
                     alert( items[rectPos[j][5]].name + ' wurde ' + rectPos[j][4] + ' geschaltet' );
                   }
                   break;
+
+                case 'Farbe':
+                  chosenRect = rectPos[j][5];
+                  $('.jscolor').css("background-color",items[rectPos[j][5]].color);
+                  $('#rect').css("background-color",items[rectPos[j][5]].color);
+                  $('.jscolor').val(items[rectPos[j][5]].color);
+                  $('#changeData').val(items[rectPos[j][5]].color);
+                  $('#changeData').attr('changeAttr','color');
+                  
+                  $('.modal-title').text('Farbeinstellung');
+                  $('#reactModal').modal('toggle');
+                  $('#color').show();
+                  break;
+
                 case 'Dimmen':
-                  $('#myModal').modal('toggle');
+                  chosenRect = rectPos[j][5];
+                  $('#dimmerData').val(items[rectPos[j][5]].dim);
+                  $('#changeData').val(items[rectPos[j][5]].dim);
+                  $('#changeData').attr('changeAttr','dim');
+
+                  $('.modal-title').text('Lampe Dimmen');
+                  $('#reactModal').modal('toggle');
+                  $('#dimmer').show();
+                  break;
+                case 'Temperatur':
+                  chosenRect = rectPos[j][5];
+                  $('#temperatureData').val(items[rectPos[j][5]].temperature);
+                  $('#changeData').val(items[rectPos[j][5]].temperature);
+                  $('#changeData').attr('changeAttr','temperature');
+
+                  $('.modal-title').text('Temperatur ändern');
+                  $('#reactModal').modal('toggle');
+                  $('#temperature').show();
+                  break;
+                case 'Wärmer':
+                  if (items[rectPos[j][5]].temperature < 100) {
+                    var temp = parseInt(items[rectPos[j][5]].temperature)+1;
+                    updateData(temp, items[rectPos[j][5]].id, 'temperature');
+                    items[rectPos[j][5]].temperature = temp;
+                    alert('Die Temperatur von ' + items[rectPos[j][5]].name + ' ist auf ' + temp + '°C eingestellt');
+                  }else{
+                    alert('Die Temperatur von ' + items[rectPos[j][5]].name + ' ist bereits auf 100°C! Denken sie an die Energiekosten! ');
+                  }
+                  break;
+                case 'Kälter':
+                  if (items[rectPos[j][5]].temperature > 0) {
+                    var temp = parseInt(items[rectPos[j][5]].temperature)-1;
+                    updateData(temp, items[rectPos[j][5]].id, 'temperature');
+                    items[rectPos[j][5]].temperature = temp;
+                    alert('Die Temperatur von ' + items[rectPos[j][5]].name + ' ist auf ' + temp + '°C eingestellt');
+                  }else{
+                    alert('Die Temperatur von ' + items[rectPos[j][5]].name + ' ist bereits auf 0°C! Denken sie an ihre Gesundheit! ');
+                  }
                   break;
                   
                 default:
-                  alert('Aktion3: ' + rectPos[j][4] + ' von Geräte mit der ID: ' + rectPos[j][5] + items[rectPos[j][5]].name);
-              }
-            		
+                  alert('Aktion: ' + rectPos[j][4] + ' von Geräte mit der ID: ' + rectPos[j][5] + items[rectPos[j][5]].name);
+              }	
         		}
     		}
-    
     	});
-    	
+      $('#reactModal').on('hidden.bs.modal', function () {
+        $('#color').hide();
+        $('#dimmer').hide();
+      });
     }
   
     function startStream(){
@@ -285,8 +337,12 @@
       document.getElementById('rect').style.backgroundColor = '#' + jscolor
     }
 
+    function changeItemData(){
+        updateData($('#changeData').val(), items[chosenRect].id, $('#changeData').attr('changeAttr'));
+        items[chosenRect][$('#changeData').attr('changeAttr')] = $('#changeData').val();
+    }
 
-
+    
     //window.onload = onLoad;
   </script>
 
@@ -311,25 +367,34 @@
   </center>
 
 
-  <div id="myModal" class="modal fade" role="dialog">
+  <div id="reactModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title"></h4>
+        <h3 class="modal-title"></h3>
       </div>
       <div class="modal-body">
-      <input value="ffcc00" class="jscolor {onFineChange:'update(this)', width:243, height:150, position:'right',
-    borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#666'}">
-        
-
-        <p id="rect" style="border:1px solid gray; width:161px; height:100px;">
-        
+        <div id="color">
+          <p> Hier kann die Farbe der ausgewählten Lampe geändert werden.</p>
+          <input id="colorData" value="ffcc00" class="jscolor {onFineChange:'update(this)', width:243, height:150, position:'right',
+          borderColor:'#FFF', insetColor:'#333333', backgroundColor:'#666'}" onchange="$('#changeData').val($(this).val());">
+          <p id="rect" style="border:1px solid gray; width:161px; height:100px;">
+        </div>
+        <div id="dimmer">
+          <p> Hier kann die Intensität der ausgewählten Lampe geändert werden.</p>
+          <input id="dimmerData" type="number" min="0" max="100" onchange="$('#changeData').val($(this).val());"><p>%</p>
+        </div>
+        <div id="temperature">
+          <p> Hier kann die Temperatur der ausgewählten Heizung geändert werden.</p>
+          <input id="temperatureData" type="number" min="0" max="100" onchange="$('#changeData').val($(this).val());"><p>°C</p>
+        </div>
       </div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" onclick="changeArucoMarker()" data-dismiss="modal">Bestätigen</button>
+      <div class="modal-footer" >
+        <input id="changeData" style="display: none;" changeAttr>
+        <button type="button" class="btn btn-default" onclick="changeItemData()" data-dismiss="modal">Bestätigen</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
       </div>
     </div>
