@@ -187,14 +187,19 @@
         if( typeof items[markers[i].id] != 'undefined'){
 
         	var text = items[markers[i].id].name;
-        	context.font = "20px Verdana";			
+        	if(window.innerWidth <= 600){
+            context.font = "30px Verdana";
+          }else{
+            context.font = "20px Verdana";
+          }	
 			    var txtHeight = parseInt(context.font);
+          
         	drawRect(text, xMin, yMin);
         	
         	for(k = 0; k !== items[markers[i].id].functions.length; k++ ){
         		//console.log(items[markers[i].id].functions[k]);
         		text = items[markers[i].id].functions[k];
-        		drawRect(text, xMax, ((k+1) * 28 +  yMin) , 1, markers[i].id);
+        		drawRect(text, xMax, ((k+1) * (txtHeight+10) +  yMin) , 1, markers[i].id);
         	}
 
         }else{
@@ -210,7 +215,6 @@
     	var type = type || 0;
 		  var length = text.length;
 
-      context.font = "20px Verdana";
 		  var txtHeight = parseInt(context.font);
 
 		  context.beginPath();
