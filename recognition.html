@@ -183,6 +183,8 @@
         navigator.getUserMedia({ video: {facingMode: "environment"} }, successCallback, errorCallback);
         
         detector = new AR.Detector();
+
+        document.body.scrollTop = document.body.scrollHeight - document.body.clientHeight;
     
         requestAnimationFrame(tick);
       }
@@ -267,7 +269,7 @@
         if( typeof items[markers[i].id] != 'undefined'){
 
         	var text = items[markers[i].id].name;
-        	if(window.innerWidth <= 600){
+        	if(window.innerWidth <= 750){
             context.font = "40px Verdana";
           }else{
             context.font = "20px Verdana";

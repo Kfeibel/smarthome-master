@@ -88,6 +88,9 @@ body {
     text-align:center;
     background:#ECECEC;
 }
+body.modal-open {
+    overflow: hidden;
+}
 p{
     margin:0;
     padding:0;
@@ -211,7 +214,8 @@ p{
 }
 #canvas{
     width:90vw !important; 
-    height:50vw !important;;
+    height:50vw !important;
+    margin-bottom: 10px;
 }
 #color{
     display: none;
