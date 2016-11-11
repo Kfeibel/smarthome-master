@@ -14,11 +14,13 @@
 
 
   <script>
+  var arucoListe = new Array, check = false;
       
      window.onload = function(){
         var devices = getAllDevices();
         for(var i = 0 ; i<devices.length ; i++){
             createItem(devices[i]);
+            arucoListe[i] = devices[i].arucoid;
         }
 
      } 
@@ -77,26 +79,46 @@
         } else{
             $('#arucoID').val('');
         }   
-
     }
 
-    function check(){
-        //console.log($('#arucoID').val());
+    function checkID(type){
+        var oldid = $('#myModal').attr('arucoid');
         
+        if($('#arucoID').val() > 1023){
+            $('#arucoID').val(oldid);
+            $('#warningText').text('WARNUNG: 1023 ist die maximale ID');
+            $("#warningText").show();
+            setTimeout(function() { $("#warningText").hide(); }, 3000);
+            check = false;
+        }else if($.inArray($('#arucoID').val(), arucoListe) != -1){
+            if(!type){
+                $('#warningText').text('WARNUNG: ID ' + $('#arucoID').val()+' ist bereits vergeben');
+            }else{
+                $('#warningText').text('ID ist bereits vergeben oder über 1023!');
+            }
+            $('#arucoID').val(oldid);
+            $("#warningText").show();
+            setTimeout(function() { $("#warningText").hide(); }, 3000);
+            check = false;
+        } else{
+            check = true;
+        }
+
         drawArucoMarker($('#arucoID').val());
+       
+        if(type && check){
+            changeArucoMarker();
+        }
     }
 
     function changeArucoMarker(){
         var itemid = $('#myModal').attr('itemid');
-        var oldid = $('#myModal').attr('arucoid');
         var newid = $('#arucoID').val();
-
-        updateArucoId(oldid, newid, itemid);
+        
+        updateData(newid, itemid , 'arucoid');
 
         location.reload();
     }
-
-
 
   </script>
 
@@ -126,8 +148,8 @@
       <div class="modal-body">
         <div>
             <p id="arucoText">ID: </p>
-            <input id="arucoID" type="number" name="quantity" min="0" max="1023" onchange="check(this.value)">
-        
+            <input id="arucoID" type="number" name="quantity" min="0" max="1023" onchange="checkID(false)">
+            <p id="warningText"> </p>
         </div>
         
         <canvas id="arucoCode"></canvas>
@@ -137,15 +159,13 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" onclick="changeArucoMarker()" data-dismiss="modal">Bestätigen</button>
+        <button type="button" class="btn btn-default" onclick="checkID(true)">Bestätigen</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
       </div>
     </div>
 
   </div>
 </div>
-
-
 </body>
   
 </html>

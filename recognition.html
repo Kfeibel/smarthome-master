@@ -12,6 +12,7 @@
   <script type="text/javascript" src="js/interface.js"></script> 
   <script type="text/javascript" src="js/aruco.js"></script> 
   <script type="text/javascript" src="js/device.js"></script> 
+  <script type="text/javascript" src="js/jscolor.js"></script> 
 	<script src="js/bootstrap.min.js"></script>
   <link href="css/menu.css" rel="stylesheet">
 
@@ -35,14 +36,41 @@
         	y = e.offsetY * scaling;
 
           
-          console.log(x, y , 900 / (window.innerWidth *0.9), rectPos);
+          //console.log(x, y , 900 / (window.innerWidth *0.9), rectPos);
 
         	for(var j=0;j<rectPos.length;j++) {
         		if(x > rectPos[j][0]
         		&& x < rectPos[j][0] + rectPos[j][2]
         		&& y > rectPos[j][1]
         		&& y < rectPos[j][1] + rectPos[j][3]) {
-            		alert('Aktion: ' + rectPos[j][4] + ' von Geräte mit der ID: ' + rectPos[j][5] + items[rectPos[j][5]].name);
+
+              switch(rectPos[j][4]) {
+                case 'An':
+                  if (items[rectPos[j][5]].state == 'on') {
+                    alert('Gerät: ' + items[rectPos[j][5]].name + ' ist bereits ' + rectPos[j][4]);
+                  }else{
+                    updateData('on', items[rectPos[j][5]].id, 'state')
+                    items[rectPos[j][5]].state = 'on';
+                    alert( items[rectPos[j][5]].name + ' wurde ' + rectPos[j][4] + ' geschaltet' );
+                  }
+                  break;
+                case 'Aus':
+                  if (items[rectPos[j][5]].state == 'off') {
+                    alert('Gerät: ' + items[rectPos[j][5]].name + ' ist bereits ' + rectPos[j][4]);
+                  }else{
+                    updateData('off', items[rectPos[j][5]].id, 'state')
+                    items[rectPos[j][5]].state = 'off';
+                    alert( items[rectPos[j][5]].name + ' wurde ' + rectPos[j][4] + ' geschaltet' );
+                  }
+                  break;
+                case 'Dimmen':
+                  $('#myModal').modal('toggle');
+                  break;
+                  
+                default:
+                  alert('Aktion3: ' + rectPos[j][4] + ' von Geräte mit der ID: ' + rectPos[j][5] + items[rectPos[j][5]].name);
+              }
+            		
         		}
     		}
     
@@ -253,6 +281,10 @@
 		  }
     }
 
+    function update(jscolor) {
+      document.getElementById('rect').style.backgroundColor = '#' + jscolor
+    }
+
 
 
     //window.onload = onLoad;
@@ -277,6 +309,33 @@
   <video id="video" autoplay="true" style="display:none;"></video>
   <canvas id="canvas" width="900" height="500" "></canvas>
   </center>
+
+
+  <div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+      <input value="ffcc00" class="jscolor {onFineChange:'update(this)', width:243, height:150, position:'right',
+    borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#666'}">
+        
+
+        <p id="rect" style="border:1px solid gray; width:161px; height:100px;">
+        
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick="changeArucoMarker()" data-dismiss="modal">Bestätigen</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 </body>

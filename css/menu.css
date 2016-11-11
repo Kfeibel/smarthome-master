@@ -118,6 +118,17 @@ p{
     margin-left: 5px;
     padding-left: 5px;
 }
+#warningText{
+    display: none;
+    color: red;
+    position: absolute;
+    font-size: 12px;
+    right: 5;
+    top: 25;
+}
+.showWarning{
+
+}
 #infoText{
     margin-top: 10px;
     font-size: small;

@@ -35,14 +35,13 @@ function initObjects(){
 }
 
 
-function updateArucoId(oldid , newid, itemid){
+function updateData(newVal, itemid, field){
     var jsObject = JSON.parse( localStorage.getItem("jsonString") );
-    jsObject = getObjects(jsObject, 'id', itemid, newid , 'arucoid');
+    jsObject = getObjects(jsObject, 'id', itemid, newVal , field);
     var jsonString = JSON.stringify(jsObject) ;
     localStorage.setItem("jsonString", jsonString);
     store();
 }
-
 
 function get(){
      var jsObject = JSON.parse( localStorage.getItem("jsonString") );
@@ -59,7 +58,7 @@ function store(){
     }
 });
    
-    console.log(localStorage.getItem("jsonString"));
+    //console.log(localStorage.getItem("jsonString"));
 }
 
 function getObjects(obj, key, val, newVal , changeVal) {
