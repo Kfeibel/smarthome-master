@@ -268,7 +268,7 @@
 
         	var text = items[markers[i].id].name;
         	if(window.innerWidth <= 600){
-            context.font = "30px Verdana";
+            context.font = "40px Verdana";
           }else{
             context.font = "20px Verdana";
           }	
@@ -378,7 +378,7 @@
       <div class="modal-body">
         <div id="color">
           <p> Hier kann die Farbe der ausgewählten Lampe geändert werden.</p>
-          <input id="colorData" value="ffcc00" class="jscolor {onFineChange:'update(this)', width:243, height:150, position:'right',
+          <input id="colorData" readonly="true"  value="ffcc00" class="jscolor {onFineChange:'update(this)', width:243, height:150, position:'right',
           borderColor:'#FFF', insetColor:'#333333', backgroundColor:'#666'}" onchange="$('#changeData').val($(this).val());">
           <p id="rect" style="border:1px solid gray; width:161px; height:100px;">
         </div>

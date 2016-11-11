@@ -120,8 +120,8 @@ p{
     color: red;
     position: absolute;
     font-size: 12px;
-    right: 5;
-    top: 25;
+    top: 0;
+    left: 35%;
 }
 .showWarning{
 
@@ -262,6 +262,9 @@ p{
     #streamButtondiv{
         font-size: 20px;
     }
+    #warningText{
+    left: 25%;
+    }
     
 }
 @media (min-width: 1024px){
@@ -279,9 +282,12 @@ p{
         /*font-size: 40px;*/
     }
     .buttonDiv{
-    float: left;
-    margin-top: -3%;
-    margin-left: -3%;
+        float: left;
+        margin-top: -3%;
+        margin-left: -3%;
+    }
+    #warningText{
+        left: 45%;
     }
    
 }
