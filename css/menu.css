@@ -241,6 +241,32 @@ p{
 #myTextarea{
     color:  #333333;
     margin: 10px;
+    width:96.64%;
+    font-family: Consolas;
+}
+
+
+
+#warning-message { 
+    padding: 20px;
+    color:  #333333;
+    vertical-align: middle;
+    display: none; 
+    height: 100%;
+} 
+
+@media only screen and (orientation:portrait) and (max-width: 450px){
+    #wrapper { 
+        display:none; 
+    }
+    #warning-message { 
+        display:block; 
+    }
+}
+@media only screen and (orientation:landscape){
+    #warning-message { 
+        display:none; 
+    }
 }
 
 @media (max-width: 450px){

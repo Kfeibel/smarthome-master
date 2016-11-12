@@ -135,7 +135,7 @@
       canvas = document.getElementById("canvas");
       canvas.style.visibility = "visible" ;
       context = canvas.getContext("2d");
-    
+      
       canvas.width = parseInt(canvas.width);
       canvas.height = parseInt(canvas.height);
       
@@ -145,14 +145,16 @@
         
         function successCallback(stream){
           if (window.URL) {
+            console.log('test');
             video.src = window.URL.createObjectURL(stream);
-            track = stream.getTracks()[0];;
+            track = stream.getTracks()[0];
             //console.log(stream, track);
           } else if (video.mozSrcObject !== undefined) {
             video.mozSrcObject = stream;
-            track = stream.getTracks()[0];;
+            track = stream.getTracks()[0];
             //console.log(stream, track);
           } else {
+            console.log('test');
             video.src = stream;
             track = stream.getTracks()[0];
             //console.log(stream, track);
@@ -343,14 +345,12 @@
         updateData($('#changeData').val(), items[chosenRect].id, $('#changeData').attr('changeAttr'));
         items[chosenRect][$('#changeData').attr('changeAttr')] = $('#changeData').val();
     }
-
-    
-    //window.onload = onLoad;
   </script>
 
 </head>
 
 <body style="font-family: arial;">
+<div id="wrapper">
   <div id="headline">
     <div class="buttonDiv">
       <button class="backbutton" onclick="location.href='index.html'"> &lt&lt</button> 
@@ -367,7 +367,6 @@
   <video id="video" autoplay="true" style="display:none;"></video>
   <canvas id="canvas" width="900" height="500" "></canvas>
   </center>
-
 
   <div id="reactModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -403,7 +402,10 @@
 
   </div>
 </div>
-
+</div>
+<div id="warning-message" onclick="$('#warning-message').hide(); $('#wrapper').show(); ">
+    Diese Seite wurde auf dem Smartphone für den Landscape-Mode konzipiert! Bitte halten sie das Smartphone dafür horizontal. Falls sie in der Vertikalen fortfahren wollen, klicken sie auf den Bildschirm.
+</div>
 
 </body>
   
