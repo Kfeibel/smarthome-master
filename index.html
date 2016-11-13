@@ -10,20 +10,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/interface.js"></script> 
-  
 
-  <script>
-  if (!sessionStorage.alreadyClicked) {
-    window.onload = function(){
-      //console.log('test1');
-      initObjects();
-    }
-
-    sessionStorage.alreadyClicked = 1;
-  }
-
-  </script>
-<!-- 1st row verticaly centered text in the square columns -->
 </head>
 
 <body style="font-family: arial;">
@@ -49,7 +36,7 @@
         </div>
     </div>
 </div>
-<div class="square bg img3">
+<div class="square bg img3" onclick="location.href='speechrecognition.html'">
     <div class="content">
         <div class="table">
             <div class="table-cell">
@@ -67,6 +54,18 @@
         </div>
     </div>
 </div>
+
+
+<script>
+  if (!sessionStorage.alreadyClicked) {
+    window.onload = function(){
+      //console.log('test1');
+      initObjects();
+    }
+
+    sessionStorage.alreadyClicked = 1;
+  }
+  </script>
 
 </body>
   

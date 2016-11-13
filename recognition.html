@@ -16,33 +16,94 @@
 	<script src="js/bootstrap.min.js"></script>
   <link href="css/menu.css" rel="stylesheet">
 
-  <script>
+</head>
+
+<body style="font-family: arial;">
+<div id="wrapper">
+  <div id="headline">
+    <div class="buttonDiv">
+      <button class="backbutton" onclick="location.href='index.html'"> &lt&lt</button> 
+    </div>
+    
+    <p >Steuerung per Augmented Reality:<br/></p> 
+  </div>
+  <div id="streamButtondiv">
+    <button class="arStartButtons" onclick="startStream()">Starte Erkennung</button>
+    <button class="arStartButtons" onclick="stopStream()">Beende Erkennung</button>
+  </div>
+  
+  <center>
+  <video id="video" autoplay="true" style="display:none;"></video>
+  <canvas id="canvas" width="900" height="500" "></canvas>
+  </center>
+
+  <div id="reactModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title"></h3>
+      </div>
+      <div class="modal-body">
+        <div id="color">
+          <p> Hier kann die Farbe der ausgewählten Lampe geändert werden.</p>
+          <input id="colorData" readonly="true"  value="ffcc00" class="jscolor {onFineChange:'update(this)', width:243, height:150, position:'right',
+          borderColor:'#FFF', insetColor:'#333333', backgroundColor:'#666'}" onchange="$('#changeData').val($(this).val());">
+          <p id="rect" style="border:1px solid gray; width:161px; height:100px;">
+        </div>
+        <div id="dimmer">
+          <p> Hier kann die Intensität der ausgewählten Lampe geändert werden.</p>
+          <input id="dimmerData" type="number" min="0" max="100" onchange="$('#changeData').val($(this).val());"><p>%</p>
+        </div>
+        <div id="temperature">
+          <p> Hier kann die Temperatur der ausgewählten Heizung geändert werden.</p>
+          <input id="temperatureData" type="number" min="0" max="100" onchange="$('#changeData').val($(this).val());"><p>°C</p>
+        </div>
+      </div>
+
+      <div class="modal-footer" >
+        <input id="changeData" style="display: none;" changeAttr>
+        <button type="button" class="btn btn-default" onclick="changeItemData()" data-dismiss="modal">Bestätigen</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+<div id="warning-message" onclick="$('#warning-message').hide(); $('#wrapper').show(); ">
+    <h3>Smartphone bitte waagerecht halten!</h3>
+    Diese Seite wurde auf dem Smartphone für den Landscape-Mode konzipiert! Bitte halten sie das Smartphone dafür horizontal. Falls sie in der Vertikalen fortfahren wollen, klicken sie auf den Bildschirm.
+</div>
+
+<script>
     var video, track, canvas, context, imageData, detector, items, rectPos = new Array, index, chosenRect= -1;
 
     window.onload = function(){
-    	
-    	items = new Array(1024);
-    	var devices = getAllDevices();
-    	
-    	for (var i =  0; i < devices.length; i++) {
-    		//console.log(i, devices[i].arucoid);
-    		if(devices[i].arucoid != ""){
-    			items[devices[i].arucoid] = devices[i];
-    		}
-    	}
-    	$('#canvas').click(function(e) {
+      
+      items = new Array(1024);
+      var devices = getAllDevices();
+      
+      for (var i =  0; i < devices.length; i++) {
+        //console.log(i, devices[i].arucoid);
+        if(devices[i].arucoid != ""){
+          items[devices[i].arucoid] = devices[i];
+        }
+      }
+      $('#canvas').click(function(e) {
         var scaling = 900 / (window.innerWidth *0.9);
-    	   var x = e.offsetX * scaling,
-        	y = e.offsetY * scaling;
+         var x = e.offsetX * scaling,
+          y = e.offsetY * scaling;
 
           
           //console.log(x, y , 900 / (window.innerWidth *0.9), rectPos);
 
-        	for(var j=0;j<rectPos.length;j++) {
-        		if(x > rectPos[j][0]
-        		&& x < rectPos[j][0] + rectPos[j][2]
-        		&& y > rectPos[j][1]
-        		&& y < rectPos[j][1] + rectPos[j][3]) {
+          for(var j=0;j<rectPos.length;j++) {
+            if(x > rectPos[j][0]
+            && x < rectPos[j][0] + rectPos[j][2]
+            && y > rectPos[j][1]
+            && y < rectPos[j][1] + rectPos[j][3]) {
 
               switch(rectPos[j][4]) {
                 case 'An':
@@ -120,10 +181,10 @@
                   
                 default:
                   alert('Aktion: ' + rectPos[j][4] + ' von Geräte mit der ID: ' + rectPos[j][5] + items[rectPos[j][5]].name);
-              }	
-        		}
-    		}
-    	});
+              } 
+            }
+        }
+      });
       $('#reactModal').on('hidden.bs.modal', function () {
         $('#color').hide();
         $('#dimmer').hide();
@@ -162,24 +223,24 @@
         }
         
         function errorCallback(error){
-        	console.log(error);
+          console.log(error);
         }
 
 
-		/*if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-  			console.log("enumerateDevices() not supported.");
-  			return;
-		 }
-		// List cameras and microphones.
+    /*if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+        console.log("enumerateDevices() not supported.");
+        return;
+     }
+    // List cameras and microphones.
 
-		navigator.mediaDevices.enumerateDevices().then(function(devices) {
-    		devices.forEach(function(device) {
-      			console.log(device.kind + ": " + device.label +
-        		" id = " + device.deviceId);
-    		});
-  		}).catch(function(err) {
-    		console.log(err.name + ": " + error.message);
-  		});*/
+    navigator.mediaDevices.enumerateDevices().then(function(devices) {
+        devices.forEach(function(device) {
+            console.log(device.kind + ": " + device.label +
+            " id = " + device.deviceId);
+        });
+      }).catch(function(err) {
+        console.log(err.name + ": " + error.message);
+      });*/
 
         
         navigator.getUserMedia({ video: {facingMode: "environment"} }, successCallback, errorCallback);
@@ -270,71 +331,71 @@
         //console.log(items[markers[i].id]);
         if( typeof items[markers[i].id] != 'undefined'){
 
-        	var text = items[markers[i].id].name;
-        	if(window.innerWidth <= 750){
+          var text = items[markers[i].id].name;
+          if(window.innerWidth <= 750){
             context.font = "35px Verdana";
           }else{
             context.font = "20px Verdana";
-          }	
-			    var txtHeight = parseInt(context.font);
+          } 
+          var txtHeight = parseInt(context.font);
           
-        	drawRect(text, xMin, yMin);
-        	
-        	for(k = 0; k !== items[markers[i].id].functions.length; k++ ){
-        		//console.log(items[markers[i].id].functions[k]);
-        		text = items[markers[i].id].functions[k];
-        		drawRect(text, xMax, ((k+1) * (txtHeight+10) +  yMin) , 1, markers[i].id);
-        	}
+          drawRect(text, xMin, yMin);
+          
+          for(k = 0; k !== items[markers[i].id].functions.length; k++ ){
+            //console.log(items[markers[i].id].functions[k]);
+            text = items[markers[i].id].functions[k];
+            drawRect(text, xMax, ((k+1) * (txtHeight+10) +  yMin) , 1, markers[i].id);
+          }
 
         }else{
-        	context.font = "10px Verdana";
-        	context.fillStyle = "red";
-      		context.lineWidth = 1;
-        	context.fillText(markers[i].id, xMin, yMin - 5 )
+          context.font = "10px Verdana";
+          context.fillStyle = "red";
+          context.lineWidth = 1;
+          context.fillText(markers[i].id, xMin, yMin - 5 )
         }
       }
     }
 
     function drawRect(text, x, y, type, id){
-    	var type = type || 0;
-		  var length = text.length;
+      var type = type || 0;
+      var length = text.length;
 
-		  var txtHeight = parseInt(context.font);
+      var txtHeight = parseInt(context.font);
 
-		  context.beginPath();
-    	context.rect(x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 );
+      context.beginPath();
+      context.rect(x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 );
 
-    	if(type == 0){
-      	context.fillStyle = '#858585';
-     	  context.fill();
-      	context.lineWidth = 1;
-      	context.strokeStyle = 'black';
-      	context.stroke();	
+      if(type == 0){
+        context.fillStyle = '#858585';
+        context.fill();
+        context.lineWidth = 1;
+        context.strokeStyle = 'black';
+        context.stroke(); 
 
-	  	  context.fillStyle = '#E8E8E8';
+        context.fillStyle = '#E8E8E8';
         context.fillText(text, x, y)
-		  }else{ 
+      }else{ 
 
 
-		    rectPos[index] = [x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 , text , id ];
-		    index++;
-		    //console.log(rectPos);
+        rectPos[index] = [x - 3, y - txtHeight + 2 , context.measureText(text).width + 10, txtHeight + 3 , text , id ];
+        index++;
+        //console.log(rectPos);
 
-      	context.fillStyle = 'white';
-      	context.shadowColor = 'black';
-      	context.shadowBlur = 15;
-      	context.shadowOffsetX = 7;
-      	context.shadowOffsetY = 7;
+        context.fillStyle = 'white';
+        context.shadowColor = 'black';
+        context.shadowBlur = 15;
+        context.shadowOffsetX = 7;
+        context.shadowOffsetY = 7;
       
-     	  context.fill();
-     	  context.shadowColor = "transparent";
-      	context.lineWidth = 1;
-      	context.strokeStyle = 'black';
-      	context.stroke();	
+        context.fill();
+        context.shadowColor = "transparent";
+        context.lineWidth = 1;
+        context.strokeStyle = 'black';
+        context.stroke(); 
 
-	  	  context.fillStyle = '#595959';
+        context.fillStyle = '#595959';
         context.fillText(text, x, y)
-		  }
+      }
     }
 
     function update(jscolor) {
@@ -346,67 +407,6 @@
         items[chosenRect][$('#changeData').attr('changeAttr')] = $('#changeData').val();
     }
   </script>
-
-</head>
-
-<body style="font-family: arial;">
-<div id="wrapper">
-  <div id="headline">
-    <div class="buttonDiv">
-      <button class="backbutton" onclick="location.href='index.html'"> &lt&lt</button> 
-    </div>
-    
-    <p >Steuerung per Augmented Reality:<br/></p> 
-  </div>
-  <div id="streamButtondiv">
-    <button class="arStartButtons" onclick="startStream()">Starte Erkennung</button>
-    <button class="arStartButtons" onclick="stopStream()">Beende Erkennung</button>
-  </div>
-  
-  <center>
-  <video id="video" autoplay="true" style="display:none;"></video>
-  <canvas id="canvas" width="900" height="500" "></canvas>
-  </center>
-
-  <div id="reactModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h3 class="modal-title"></h3>
-      </div>
-      <div class="modal-body">
-        <div id="color">
-          <p> Hier kann die Farbe der ausgewählten Lampe geändert werden.</p>
-          <input id="colorData" readonly="true"  value="ffcc00" class="jscolor {onFineChange:'update(this)', width:243, height:150, position:'right',
-          borderColor:'#FFF', insetColor:'#333333', backgroundColor:'#666'}" onchange="$('#changeData').val($(this).val());">
-          <p id="rect" style="border:1px solid gray; width:161px; height:100px;">
-        </div>
-        <div id="dimmer">
-          <p> Hier kann die Intensität der ausgewählten Lampe geändert werden.</p>
-          <input id="dimmerData" type="number" min="0" max="100" onchange="$('#changeData').val($(this).val());"><p>%</p>
-        </div>
-        <div id="temperature">
-          <p> Hier kann die Temperatur der ausgewählten Heizung geändert werden.</p>
-          <input id="temperatureData" type="number" min="0" max="100" onchange="$('#changeData').val($(this).val());"><p>°C</p>
-        </div>
-      </div>
-
-      <div class="modal-footer" >
-        <input id="changeData" style="display: none;" changeAttr>
-        <button type="button" class="btn btn-default" onclick="changeItemData()" data-dismiss="modal">Bestätigen</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-</div>
-<div id="warning-message" onclick="$('#warning-message').hide(); $('#wrapper').show(); ">
-    <h3>Smartphone bitte waagerecht halten!</h3>
-    Diese Seite wurde auf dem Smartphone für den Landscape-Mode konzipiert! Bitte halten sie das Smartphone dafür horizontal. Falls sie in der Vertikalen fortfahren wollen, klicken sie auf den Bildschirm.
-</div>
 
 </body>
   

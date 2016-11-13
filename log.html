@@ -11,63 +11,6 @@
   <script src="js/device.js"></script>
   <script src="js/interface.js"></script>
 
-  <script>
-      
-     window.onload = function(){
-      $('#myTextarea').height('70%');// - $('#headline').height());
-      $("#myTextarea").val("Bekannte Geräte und ihre aktuellen Einstellungen: \n\n");
-        var devices = getAllDevices();
-        for(var i = 0 ; i<devices.length ; i++){
-            createItem(devices[i]);
-        }
-
-     } 
-
-    function createItem(device){
-      if (device.type == 'led') {
-        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\tIntensität: ' + device.dim + '%\n\tFarbe: #'+ device.color + '\n\n' );
-      }else if (device.type == 'lamp') {
-        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\n');
-      }else if (device.type == 'heater') {
-        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\t Temperatur: ' + device.temperature + '\n\n');
-      }
-      
-
-
-        //console.log(device);
-/*
-        var div = document.createElement("div");
-        div.setAttribute("class", "square bg");
-        div.setAttribute("id", device.arucoid);
-        div.setAttribute("style", "background-image: url('img/background.jpg'" );
-       
-
-        var div2 = document.createElement("div");
-        div2.setAttribute("class", "content");
-
-        var div3 = document.createElement("div");
-        div3.setAttribute("class", "table");
-
-        var div4 = document.createElement("div");
-        div4.setAttribute("class", "table-cell");
-        if(device.arucoid !=  ""){
-            div4.innerHTML = device.name +  '<br>' +'ID: ' + device.arucoid;
-        }else{
-            div4.innerHTML = device.name +  '<br>' +'Keine ID hinterlegt';
-        }
-
-        div3.appendChild(div4);
-        div2.appendChild(div3);
-        div.appendChild(div2);
-        document.body.appendChild(div);*/
-
-    }
-
-  </script>
-
-
-
-
 </head>
 
 <body style="font-family: arial;"> 
@@ -82,7 +25,28 @@
 <textarea id="myTextarea" readonly="true">
 </textarea>
 
+<script>
+      
+     window.onload = function(){
+      $('#myTextarea').height('70%');// - $('#headline').height());
+      $("#myTextarea").val("Bekannte Geräte und ihre aktuellen Einstellungen: \n\n");
+      var devices = getAllDevices();
+      for(var i = 0 ; i<devices.length ; i++){
+        createItem(devices[i]);
+      }
+     } 
 
+    function createItem(device){
+      if (device.type == 'led') {
+        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\tIntensität: ' + device.dim + '%\n\tFarbe: #'+ device.color + '\n\n' );
+      }else if (device.type == 'lamp') {
+        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\n');
+      }else if (device.type == 'heater') {
+        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\t Temperatur: ' + device.temperature + '\n\n');
+      }
+    }
+  </script>
+  
 </body>
   
 </html>

@@ -12,8 +12,49 @@
   <script src="js/interface.js"></script>
   <script src="js/markers.js"></script>
 
+</head>
 
-  <script>
+<body style="font-family: arial;"> 
+<div id="headline">
+    
+    <div class="buttonDiv">
+        <button class="backbutton" onclick="location.href='index.html'"> &lt&lt</button> 
+    </div>
+    <p>Liste aller bekannten intelligente Geräte des Systems. Klicke auf sie, um ihnen eine spezifische ID zu geben<br/> </p> 
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <div>
+            <p id="arucoText">ID: </p>
+            <input id="arucoID" type="number" name="quantity" min="0" max="1023" onchange="checkID(false)">
+            <p id="warningText"> </p>
+        </div>
+        
+        <canvas id="arucoCode"></canvas>
+        <p id="infoText">Der dargestellte Marker kann abgespeichert und ausgedruckt werden, um ihn an das entsprechende Geräte anzubringen. Falls die Größe nicht den Vorstellungen entspricht, kann auf folgender Seite ein beliebig großer Marker erstellt werden:</p>
+        <a href="http://terpconnect.umd.edu/~jwelsh12/enes100/markergen.html" target="_blank"> Marker Erstellen</a>  
+        
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick="checkID(true)">Bestätigen</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
   var arucoListe = new Array, check = false;
       
      window.onload = function(){
@@ -122,50 +163,6 @@
 
   </script>
 
-
-
-
-</head>
-
-<body style="font-family: arial;"> 
-<div id="headline">
-    
-    <div class="buttonDiv">
-        <button class="backbutton" onclick="location.href='index.html'"> &lt&lt</button> 
-    </div>
-    <p>Liste aller bekannten intelligente Geräte des Systems. Klicke auf sie, um ihnen eine spezifische ID zu geben<br/> </p> 
-</div>
-
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title"></h4>
-      </div>
-      <div class="modal-body">
-        <div>
-            <p id="arucoText">ID: </p>
-            <input id="arucoID" type="number" name="quantity" min="0" max="1023" onchange="checkID(false)">
-            <p id="warningText"> </p>
-        </div>
-        
-        <canvas id="arucoCode"></canvas>
-        <p id="infoText">Der dargestellte Marker kann abgespeichert und ausgedruckt werden, um ihn an das entsprechende Geräte anzubringen. Falls die Größe nicht den Vorstellungen entspricht, kann auf folgender Seite ein beliebig großer Marker erstellt werden:</p>
-        <a href="http://terpconnect.umd.edu/~jwelsh12/enes100/markergen.html" target="_blank"> Marker Erstellen</a>  
-        
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" onclick="checkID(true)">Bestätigen</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-      </div>
-    </div>
-
-  </div>
-</div>
 </body>
   
 </html>

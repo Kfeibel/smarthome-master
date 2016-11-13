@@ -176,6 +176,8 @@ p{
     float: left;
     margin-top: -3%;
     margin-left: -3%;
+    width: 35px;
+    height: 35px;
 }
 
 .backbutton {
@@ -254,6 +256,54 @@ p{
     display: none; 
     height: 100%;
 } 
+
+
+ .center {
+    padding: 10px;
+    text-align: center;
+  }
+  .final {
+    color: black;
+    padding-right: 3px; 
+  }
+  .interim {
+    color: gray;
+  }
+  .info {
+    font-size: 14px;
+    text-align: center;
+    color: #777;
+    display: none;
+  }
+  .right {
+    float: right;
+  }
+  .sidebyside {
+    display: inline-block;
+    width: 45%;
+    min-height: 40px;
+    text-align: left;
+    vertical-align: top;
+  }
+  #info {
+    font-size: 20px;
+    text-align: center;
+    color: #777;
+    visibility: hidden;
+  }
+  #results {
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+    min-height: 150px;
+  }
+  #start_button {
+    border: 0;
+    background-color:transparent;
+    padding: 0;
+  }
 
 @media only screen and (orientation:portrait) and (max-width: 450px){
     #wrapper { 
