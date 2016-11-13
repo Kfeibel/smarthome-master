@@ -21,9 +21,9 @@
     <p>Regelerstellung per natürlicher Sprache<br/> </p> 
 </div>
 <div id="info">
-  <p id="info_start">Click on the microphone icon and begin speaking.</p>
+  <p id="info_start">Klicke auf das Mikrofon und fange an zu sprechen.</p>
   <p id="info_no_parity">Keine Übereinstimmung gefunden. Versuchen sie es erneut!</p>
-  <p id="info_speak_now">Speak now.</p>
+  <p id="info_speak_now">Du kannst jetzt Sprechen.</p>
   <p id="info_no_speech">No speech was detected. You may need to adjust your
     <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
       microphone settings</a>.</p>
@@ -32,6 +32,8 @@
     <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
     microphone settings</a> are configured correctly.</p>
   <p id="info_allow">Click the "Allow" button above to enable your microphone.</p>
+  <p id="info_go_on">Sie können den Befehl noch editieren oder direkt 'Fortfahren'.</p>
+  <p id="info_no_intent">Es wurde keine Absicht gefunden.</p>
   <p id="info_denied">Permission to use microphone was denied.</p>
   <p id="info_blocked">Permission to use microphone is blocked. To change,
     go to chrome://settings/contentExceptions#media-stream</p>
@@ -39,14 +41,45 @@
      Upgrade to <a href="//www.google.com/chrome">Chrome</a>
      version 25 or later.</p>
 </div>
-<div class="right">
-  <button id="start_button" onclick="startButton(event)">
-    <img id="start_img" src="mic.gif" alt="Start"></button>
+<div style="height: 170px;">
+  
+  <div id="results">
+    <div class="right">
+      <button id="start_button" onclick="startButton(event , 1)">
+        <img id="start_img" src="mic.gif" alt="Start"></button>
+    </div>
+    <p style="color: #777; font-size: 18px;">Wenn:</p>
+    <textarea id="final_span" class="final"></textarea>
+    <!--<span id="interim_span" class="interim"></span> -->
+    
+  </div>
+  
+  <div id="results_then">
+    <div class="right">
+      <button id="start_button_then" onclick="startButton(event , 2)">
+        <img id="start_img_then" src="mic.gif" alt="Start"></button>
+    </div>
+    <p style="color: #777; font-size: 18px;">Dann:</p>
+    <textarea id="final_span_then" class="final"></textarea> 
+    <!--<span id="interim_span" class="interim"></span> -->
+  </div>
+
+  <div id="continueButtondiv" style="display: none;"">  
+    <button class="continueButton" style="width: 30%;" onclick="fireCall()">Fortfahren</button>
+  </div>
 </div>
-<div id="results">
-  <span id="final_span" class="final"></span>
-  <!--<span id="interim_span" class="interim"></span> -->
-  <p>
+<div id="tableline" style="height: 25px; display: none;">
+    <p style="float: left; margin-left: 2%; color: #333;">If:</p>
+    <p style="float: right; margin-right: 2%; color: #333;">Then:</p>
+</div>
+
+<div id="wrap">
+    <div id="left_col">
+ 
+    </div>
+    <div id="right_col">
+        
+    </div>
 </div>
 <script>
 
@@ -58,10 +91,12 @@ var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
+var buttonType;
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {
   start_button.style.display = 'inline-block';
+  start_button_then.style.display = 'inline-block';
   var recognition = new webkitSpeechRecognition();
   recognition.continuous = true;
   //recognition.interimResults = true;
@@ -69,17 +104,24 @@ if (!('webkitSpeechRecognition' in window)) {
   recognition.onstart = function() {
     recognizing = true;
     showInfo('info_speak_now');
-    start_img.src = 'mic-animate.gif';
+    if(buttonType == 1){
+      start_img.src = 'mic-animate.gif';
+    }else{
+      start_img_then.src = 'mic-animate.gif';
+    }
+    
   };
 
   recognition.onerror = function(event) {
     if (event.error == 'no-speech') {
       start_img.src = 'mic.gif';
+      start_img_then.src = 'mic.gif';
       showInfo('info_no_speech');
       ignore_onend = true;
     }
     if (event.error == 'audio-capture') {
       start_img.src = 'mic.gif';
+      start_img_then.src = 'mic.gif';
       showInfo('info_no_microphone');
       ignore_onend = true;
     }
@@ -99,12 +141,14 @@ if (!('webkitSpeechRecognition' in window)) {
       return;
     }
     start_img.src = 'mic.gif';
+    start_img_then.src = 'mic.gif';
     if (!final_transcript) {
       showInfo('info_start');
       return;
     }
-    showInfo('');
-    fireCall(final_transcript);
+    showInfo('info_go_on');
+    //fireCall(final_transcript);
+    continueButtondiv.style.display='block';
   };
 
   recognition.onresult = function(event) {
@@ -117,7 +161,13 @@ if (!('webkitSpeechRecognition' in window)) {
       }
     }
     final_transcript = capitalize(final_transcript);
-    final_span.innerHTML = linebreak(final_transcript);
+
+    if(buttonType == 1){
+      final_span.innerHTML = linebreak(final_transcript);
+    }else{
+      final_span_then.innerHTML = linebreak(final_transcript);
+    }
+    
     //interim_span.innerHTML = linebreak(interim_transcript);
     //if (final_transcript || interim_transcript) {
 
@@ -127,6 +177,7 @@ if (!('webkitSpeechRecognition' in window)) {
 
 function upgrade() {
   start_button.style.visibility = 'hidden';
+  start_button_then.style.visibility = 'hidden';
   showInfo('info_upgrade');
 }
 
@@ -141,18 +192,26 @@ function capitalize(s) {
   return s.replace(first_char, function(m) { return m.toUpperCase(); });
 }
 
-function startButton(event) {
+function startButton(event , typeButton) {
   if (recognizing) {
     recognition.stop();
     return;
   }
+  continueButtondiv.style.display='none';
+  
+  buttonType = typeButton;
   final_transcript = '';
   recognition.lang =  'de-DE';
-  recognition.start();
+  recognition.start('test');
   ignore_onend = false;
   final_span.innerHTML = '';
+  final_span_then.innerHTML = '';
   //interim_span.innerHTML = '';
-  start_img.src = 'mic-slash.gif';
+  if(buttonType == 1){
+    start_img.src = 'mic-slash.gif';
+  }else{
+    start_img_then.src = 'mic-slash.gif';
+  }
   showInfo('info_allow');
   
   start_timestamp = event.timeStamp;
@@ -171,7 +230,14 @@ function showInfo(s) {
   }
 }
 
-function fireCall(message){
+function fireCall(){
+  var message;
+  if(buttonType == 1){
+      message = final_span.value ;
+  }else{
+      message = final_span_then.value;
+  }
+
   $.ajax({
   url: 'https://api.wit.ai/message',
   data: {
@@ -181,19 +247,59 @@ function fireCall(message){
   dataType: 'jsonp',
   method: 'GET',
   success: function(response) {
-      console.log("success!", response);
+   console.log("success!", response);
       var entities = response.entities;
       if(Object.keys(entities).length==0){
         showInfo('info_no_parity');
         return;
       }
-      if (response.entities.intent[0].value === 'toggle_light') {
+
+      if(!("intent" in entities)){
+        showInfo('info_no_intent');
+        return;
+      }
+
+      if(response.entities.intent[0].confidence < 0.8){
+        showInfo('info_no_intent');
+        return;
+      }
+      tableline.style.display='block';
+      createSpan();
+      
+      /*if (response.entities.intent[0].value === 'toggle_light') {
         var value = entities.on_off && entities.on_off.value;
         console.log(entities.on_off[0].value);
-      }
+      }*/
   }
 });
 }
+function createSpan(){
+  var div = document.createElement("div");
+
+  var span = document.createElement("span");
+  span.setAttribute("class", "glyphicon glyphicon-remove");
+  span.setAttribute("style", "vertical-align: middle; color: #343d58;" );
+
+  var textarea = document.createElement("textarea");
+  textarea.setAttribute("class", "if_then_box");
+  textarea.setAttribute("readonly", "true");
+
+  div.appendChild(span);
+  div.appendChild(textarea);
+
+  if(buttonType == 1){
+    div.appendChild(span);
+    div.appendChild(textarea);
+    left_col.appendChild(div);
+  }else{
+    div.appendChild(textarea);
+    div.appendChild(span);
+    right_col.appendChild(div);
+  }
+
+}
+
+
 </script>
 
 </body>
