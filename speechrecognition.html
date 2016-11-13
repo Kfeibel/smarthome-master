@@ -45,7 +45,7 @@
 </div>
 <div id="results">
   <span id="final_span" class="final"></span>
-  <span id="interim_span" class="interim"></span>
+  <!--<span id="interim_span" class="interim"></span> -->
   <p>
 </div>
 <script>
@@ -64,7 +64,7 @@ if (!('webkitSpeechRecognition' in window)) {
   start_button.style.display = 'inline-block';
   var recognition = new webkitSpeechRecognition();
   recognition.continuous = true;
-  recognition.interimResults = true;
+  //recognition.interimResults = true;
 
   recognition.onstart = function() {
     recognizing = true;
@@ -108,20 +108,20 @@ if (!('webkitSpeechRecognition' in window)) {
   };
 
   recognition.onresult = function(event) {
-    var interim_transcript = '';
+    //var interim_transcript = '';
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         final_transcript += event.results[i][0].transcript;
       } else {
-        interim_transcript += event.results[i][0].transcript;
+       // interim_transcript += event.results[i][0].transcript;
       }
     }
     final_transcript = capitalize(final_transcript);
     final_span.innerHTML = linebreak(final_transcript);
-    interim_span.innerHTML = linebreak(interim_transcript);
-    if (final_transcript || interim_transcript) {
+    //interim_span.innerHTML = linebreak(interim_transcript);
+    //if (final_transcript || interim_transcript) {
 
-    }
+    //}
   };
 }
 
@@ -151,7 +151,7 @@ function startButton(event) {
   recognition.start();
   ignore_onend = false;
   final_span.innerHTML = '';
-  interim_span.innerHTML = '';
+  //interim_span.innerHTML = '';
   start_img.src = 'mic-slash.gif';
   showInfo('info_allow');
   
