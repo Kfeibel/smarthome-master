@@ -339,13 +339,15 @@ p{
 }
 .if_then_box{
     padding: 5px;
-    width: 90%;
+    width: 80%;
     height: 100px;
     margin: 5px;
     resize: none;
-    background-color: #ababab;
+    background-color: #d2d2d2;
     vertical-align: middle;
     display: inline-block;
+    font-size: small;
+    color: #3d4552;
 }
 
 
@@ -389,6 +391,9 @@ p{
     }
     #warningText{
     left: 25%;
+    }
+    #continueButtondiv{
+        font-size: 15px;
     }
     
 }

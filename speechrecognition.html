@@ -22,7 +22,7 @@
 </div>
 <div id="info">
   <p id="info_start">Klicke auf das Mikrofon und fange an zu sprechen.</p>
-  <p id="info_no_parity">Keine Übereinstimmung gefunden. Versuchen sie es erneut!</p>
+  <p id="info_no_parity" style="color: #a01616;">Keine Übereinstimmung gefunden. Versuchen sie es erneut!</p>
   <p id="info_speak_now">Du kannst jetzt Sprechen.</p>
   <p id="info_no_speech">No speech was detected. You may need to adjust your
     <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
@@ -33,7 +33,7 @@
     microphone settings</a> are configured correctly.</p>
   <p id="info_allow">Click the "Allow" button above to enable your microphone.</p>
   <p id="info_go_on">Sie können den Befehl noch editieren oder direkt 'Fortfahren'.</p>
-  <p id="info_no_intent">Es wurde keine Absicht gefunden.</p>
+  <p id="info_no_intent" style="color: #a01616;">Es wurde keine Absicht gefunden.</p>
   <p id="info_denied">Permission to use microphone was denied.</p>
   <p id="info_blocked">Permission to use microphone is blocked. To change,
     go to chrome://settings/contentExceptions#media-stream</p>
@@ -92,6 +92,7 @@ var recognizing = false;
 var ignore_onend;
 var start_timestamp;
 var buttonType;
+var globalIndex = 0;
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {
@@ -264,28 +265,51 @@ function fireCall(){
         return;
       }
       tableline.style.display='block';
-      createSpan();
-      
-      /*if (response.entities.intent[0].value === 'toggle_light') {
-        var value = entities.on_off && entities.on_off.value;
-        console.log(entities.on_off[0].value);
-      }*/
-  }
-});
+      var textid = createSpan();
+    
+      if(buttonType == 1){
+        var tempEqual = '== ';
+      }else{
+        var tempEqual = '= ';
+      }  
+
+      if (response.entities.intent[0].value === 'toggle_light') {
+        $('#'+textid).val('type == led || type == lamp\n');
+        $('#'+textid).val($('#'+textid).val() + 'where == ' + response.entities.where[0].value+ '\n' );
+        $('#'+textid).val($('#'+textid).val() + 'state ' + tempEqual + response.entities.on_off[0].value + '\n' );
+        
+      }
+      if (response.entities.intent[0].value === 'heather_controll') {
+        $('#'+textid).val('type == heater\n');
+        $('#'+textid).val($('#'+textid).val() + 'where == ' + response.entities.where[0].value + '\n');
+        
+        if (!(response.entities.on_off === undefined)){
+          $('#'+textid).val($('#'+textid).val() + 'state '+ tempEqual + response.entities.on_off[0].value + '\n' );
+        }
+        
+        if (!(response.entities.temperature === undefined)){
+          $('#'+textid).val($('#'+textid).val() + 'temperature '+ tempEqual + response.entities.temperature[0].value + '\n' );
+        }
+        
+        
+      }
+    }
+  });
 }
+
 function createSpan(){
   var div = document.createElement("div");
+  div.setAttribute("id", "div"+ globalIndex);
 
   var span = document.createElement("span");
   span.setAttribute("class", "glyphicon glyphicon-remove");
   span.setAttribute("style", "vertical-align: middle; color: #343d58;" );
+  span.setAttribute("onclick", "div"+globalIndex+".style.display = 'none'");
 
   var textarea = document.createElement("textarea");
+  textarea.setAttribute("id", "textarea"+ globalIndex);
   textarea.setAttribute("class", "if_then_box");
   textarea.setAttribute("readonly", "true");
-
-  div.appendChild(span);
-  div.appendChild(textarea);
 
   if(buttonType == 1){
     div.appendChild(span);
@@ -296,7 +320,9 @@ function createSpan(){
     div.appendChild(span);
     right_col.appendChild(div);
   }
+  globalIndex++;
 
+  return "textarea"+ (globalIndex-1); 
 }
 
 
