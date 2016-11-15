@@ -33,7 +33,8 @@
     microphone settings</a> are configured correctly.</p>
   <p id="info_allow">Click the "Allow" button above to enable your microphone.</p>
   <p id="info_go_on">Sie können den Befehl noch editieren oder direkt 'Fortfahren'.</p>
-  <p id="info_no_intent" style="color: #a01616;">Es wurde keine Absicht gefunden.</p>
+  <p id="info_no_intent" style="color: #a01616;">Es wurde keine Absicht erkannt.</p>
+  <p id="info_no_where" style="color: #a01616;">Es wurde keine Ort erkannt.</p>
   <p id="info_denied">Permission to use microphone was denied.</p>
   <p id="info_blocked">Permission to use microphone is blocked. To change,
     go to chrome://settings/contentExceptions#media-stream</p>
@@ -66,7 +67,7 @@
 
   <div id="continueButtondiv" style="display: none;"">  
     <button class="continueButton" style="width: 40%;" onclick="fireCall()">Fortfahren</button>
-    <button id="createRule" class="continueButton createRule" disabled="disabled" style="width: 40%;" onclick="createRule()">Regel erstellen</button>
+    <button id="createRule" class="continueButton createRule" disabled style="width: 40%;" onclick="createRule()">Regel erstellen</button>
   </div>
 </div>
 <div id="tableline" style="height: 25px; display: none;">
@@ -249,7 +250,7 @@ function fireCall(){
   dataType: 'jsonp',
   method: 'GET',
   success: function(response) {
-   console.log("success!", response);
+    console.log("success!", response);
       var entities = response.entities;
       if(Object.keys(entities).length==0){
         showInfo('info_no_parity');
@@ -260,7 +261,10 @@ function fireCall(){
         showInfo('info_no_intent');
         return;
       }
-
+      if(!("where" in entities)){
+        showInfo('info_no_where');
+        return;
+      }
       if(response.entities.intent[0].confidence < 0.8){
         showInfo('info_no_intent');
         return;
@@ -273,7 +277,7 @@ function fireCall(){
       }else{
         var tempEqual = '= ';
       }  
-
+     
       if (response.entities.intent[0].value === 'toggle_light') {
         $('#'+textid).val('type == led || type == lamp\n');
         $('#'+textid).val($('#'+textid).val() + 'where == ' + response.entities.where[0].value+ '\n' );
@@ -291,13 +295,10 @@ function fireCall(){
         if (!(response.entities.temperature === undefined)){
           $('#'+textid).val($('#'+textid).val() + 'temperature '+ tempEqual + response.entities.temperature[0].value + '\n' );
         }
-
-
-        
-        if ( $('#left_col').children().length > 0  && $('#ri_col').children().length > 0) {
-          $('#createRule').attr("disabled", false);
-        }
       }
+      if ( $('#left_col').children().length > 0  && $('#right_col').children().length > 0) {
+          $('#createRule').removeAttr('disabled');
+        }
     }
   });
 }
@@ -309,7 +310,8 @@ function createSpan(){
   var span = document.createElement("span");
   span.setAttribute("class", "glyphicon glyphicon-remove");
   span.setAttribute("style", "vertical-align: middle; color: #343d58;" );
-  span.setAttribute("onclick", "div"+globalIndex+".style.display = 'none'");
+  span.setAttribute("onclick", "removeDivBox('#div"+globalIndex+"' )");
+    
 
   var textarea = document.createElement("textarea");
   textarea.setAttribute("id", "textarea"+ globalIndex);
@@ -332,6 +334,15 @@ function createSpan(){
 
 function createRule(){
   alert('Mit den angegebenen Bedingungen und den gewünschten Aktionen, können Regeln mit vielen Abhängigkeiten automatsch erstellt werden');
+}
+
+function removeDivBox(idDivBox){
+
+  $(idDivBox).remove();
+  
+  if ( $('#left_col').children().length <= 0  || $('#right_col').children().length <= 0) {
+    $('#createRule').prop('disabled', true);
+  }
 }
 
 
