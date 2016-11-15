@@ -65,7 +65,8 @@
   </div>
 
   <div id="continueButtondiv" style="display: none;"">  
-    <button class="continueButton" style="width: 30%;" onclick="fireCall()">Fortfahren</button>
+    <button class="continueButton" style="width: 40%;" onclick="fireCall()">Fortfahren</button>
+    <button id="createRule" class="continueButton createRule" disabled="disabled" style="width: 40%;" onclick="createRule()">Regel erstellen</button>
   </div>
 </div>
 <div id="tableline" style="height: 25px; display: none;">
@@ -290,8 +291,12 @@ function fireCall(){
         if (!(response.entities.temperature === undefined)){
           $('#'+textid).val($('#'+textid).val() + 'temperature '+ tempEqual + response.entities.temperature[0].value + '\n' );
         }
+
+
         
-        
+        if ( $('#left_col').children().length > 0  && $('#ri_col').children().length > 0) {
+          $('#createRule').attr("disabled", false);
+        }
       }
     }
   });
@@ -323,6 +328,10 @@ function createSpan(){
   globalIndex++;
 
   return "textarea"+ (globalIndex-1); 
+}
+
+function createRule(){
+  alert('Mit den angegebenen Bedingungen und den gewünschten Aktionen, können Regeln mit vielen Abhängigkeiten automatsch erstellt werden');
 }
 
 

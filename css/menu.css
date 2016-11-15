@@ -351,7 +351,6 @@ p{
 }
 
 
-
 @media only screen and (orientation:portrait) and (max-width: 450px){
     #wrapper { 
         display:none; 

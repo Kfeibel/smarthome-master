@@ -10,7 +10,6 @@ function initObjects(){
    },
    dataType: 'json',
    success: function(data) {
-
         var jsonString = JSON.stringify(data) ;
 
         localStorage.setItem("jsonString", jsonString);
@@ -84,18 +83,18 @@ function createObjektArray(o) {
                 
                 if( o[i][j].type == 'lamp'){
                 
-                    var singleDevice = new Lamp(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,o[i][j].dim, o[i][j].color, o[i][j].state, ['An', 'Aus']);
+                    var singleDevice = new Lamp(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,o[i][j].dim, o[i][j].color, o[i][j].state, ['An', 'Aus'], o[i][j].where);
                     devices[count]= singleDevice;
                     count++;
                 }else
                 if( o[i][j].type == 'led'){
                 
-                    var singleDevice = new Lamp(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,o[i][j].dim, o[i][j].color, o[i][j].state, ['An', 'Aus', 'Dimmen', 'Farbe']);
+                    var singleDevice = new Lamp(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,o[i][j].dim, o[i][j].color, o[i][j].state, ['An', 'Aus', 'Dimmen', 'Farbe'], o[i][j].where);
                     devices[count]= singleDevice;
                     count++;
                 }else
                 if( o[i][j].type == 'heater'){
-                    var singleDevice = new Heater(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,o[i][j].temperature, o[i][j].state, ['An', 'Aus', 'Temperatur', 'Wärmer', 'Kälter']);
+                    var singleDevice = new Heater(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,o[i][j].temperature, o[i][j].state, ['An', 'Aus', 'Temperatur', 'Wärmer', 'Kälter'], o[i][j].where);
                     devices[count]= singleDevice;
                     count++;
                 }
@@ -111,7 +110,7 @@ function getAllDevices(){
         var devices = new Array;
         var jsObject = get();
         var count = 0;
+                
         devices = createObjektArray(jsObject, count);
-        
 		return devices;
     }

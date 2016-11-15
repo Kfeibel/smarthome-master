@@ -33,20 +33,21 @@
       var devices = getAllDevices();
       for(var i = 0 ; i<devices.length ; i++){
         createItem(devices[i]);
+        //console.log(devices[i]);
       }
      } 
 
     function createItem(device){
       if (device.type == 'led') {
-        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\tIntensität: ' + device.dim + '%\n\tFarbe: #'+ device.color + '\n\n' );
+        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type +  '\n\tOrt: ' + device.where +'\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\tIntensität: ' + device.dim + '%\n\tFarbe: #'+ device.color + '\n\n' );
       }else if (device.type == 'lamp') {
-        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\n');
+        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tOrt: ' + device.where +'\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\n');
       }else if (device.type == 'heater') {
-        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\t Temperatur: ' + device.temperature + '\n\n');
+        $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type + '\n\tOrt: ' + device.where + '\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\tTemperatur: ' + device.temperature + '\n\n');
       }
     }
   </script>
-  
+
 </body>
   
 </html>
