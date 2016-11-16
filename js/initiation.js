@@ -1,61 +1,36 @@
 function initObjects(){
+    getAllDummyElements();
+    //getAllElements();                   //OpenHab
+}
 
-    $.ajax({
-   url: 'json/devices.json',
-   data: {
-      format: 'string'
-   },
-   error: function() {
-        console.log('Fehler');
-   },
-   dataType: 'json',
-   success: function(data) {
-        var jsonString = JSON.stringify(data) ;
-
-        localStorage.setItem("jsonString", jsonString);
-   },
-   type: 'GET'
-});
-
-/*
-    console.log('test2');
-    jQuery.get('json/devices.json', function(data) {
-        console.log('test3');
-
-        var jsonString = JSON.stringify(data) ;
-
-        console.log(data);
-
-        localStorage.setItem("jsonString", jsonString);
-
-        console.log(JSON.parse( localStorage.getItem("jsonString") ));
-        console.log(jsonString);
-  });*/
+function fillLocalStorage(data){
+    var jsonString = JSON.stringify(data) ;
+    localStorage.setItem("jsonString", jsonString); 
 }
 
 
 function updateData(newVal, itemid, field){
     var jsObject = JSON.parse( localStorage.getItem("jsonString") );
-    jsObject = getObjects(jsObject, 'id', itemid, newVal , field);
-    var jsonString = JSON.stringify(jsObject) ;
-    localStorage.setItem("jsonString", jsonString);
+    fillLocalStorage(getObjects(jsObject, 'id', itemid, newVal , field));
+    
     store();
+    //setState( newVal) ;       //OpenHab
 }
 
 function get(){
-     var jsObject = JSON.parse( localStorage.getItem("jsonString") );
+    var jsObject = JSON.parse( localStorage.getItem("jsonString") );
     return jsObject;
 }
 
 
 function store(){
     $.ajax({
-    type : "POST",
-    url : "php/ajax.php",
-    data : {
-        json : localStorage.getItem("jsonString")
-    }
-});
+        type : "POST",
+        url : "php/ajax.php",
+        data : {
+            json : localStorage.getItem("jsonString")
+        }
+    });
    
     //console.log(localStorage.getItem("jsonString"));
 }
@@ -83,7 +58,7 @@ function createObjektArray(o) {
                 
                 if( o[i][j].type == 'lamp'){
                 
-                    var singleDevice = new Lamp(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,o[i][j].dim, o[i][j].color, o[i][j].state, ['An', 'Aus'], o[i][j].where);
+                    var singleDevice = new Lamp(o[i][j].id, o[i][j].type , o[i][j].name , o[i][j].arucoid ,100, '', o[i][j].state, ['An', 'Aus'], o[i][j].where);
                     devices[count]= singleDevice;
                     count++;
                 }else
@@ -109,8 +84,8 @@ function createObjektArray(o) {
 function getAllDevices(){
         var devices = new Array;
         var jsObject = get();
-        var count = 0;
+        
                 
-        devices = createObjektArray(jsObject, count);
+        devices = createObjektArray(jsObject);
 		return devices;
     }

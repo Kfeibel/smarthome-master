@@ -9,7 +9,7 @@
   <script src="js/bootstrap.min.js"></script>
   <link href="css/menu.css" rel="stylesheet">
   <script src="js/device.js"></script>
-  <script src="js/interface.js"></script>
+  <script src="js/initiation.js"></script>
 </head>
 
 <body style="font-family: arial;"> 
@@ -250,7 +250,7 @@ function fireCall(){
   dataType: 'jsonp',
   method: 'GET',
   success: function(response) {
-    console.log("success!", response);
+    //console.log("success!", response);
       var entities = response.entities;
       if(Object.keys(entities).length==0){
         showInfo('info_no_parity');

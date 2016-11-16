@@ -9,7 +9,12 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="js/interface.js"></script> 
+  <!--<script type='text/javascript' src='js/tinycolor.js'></script>-->
+  <script type="text/javascript" src="js/initiation.js"></script> 
+
+  <script type="text/javascript" src="js/dummyInterface.js"></script> 
+  <script type="text/javascript" src="js/openHabInterface.js"></script> 
+
 
 </head>
 
@@ -57,14 +62,15 @@
 
 
 <script>
-  //if (!sessionStorage.alreadyClicked) {
+  if (!sessionStorage.alreadyClicked) {
     window.onload = function(){
       //console.log('test1');
       initObjects();
     }
 
-    //sessionStorage.alreadyClicked = 1;
-  //}
+    sessionStorage.alreadyClicked = 1;
+  }
+
   </script>
 
 </body>
