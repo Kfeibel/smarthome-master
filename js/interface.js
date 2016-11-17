@@ -49,13 +49,13 @@ function get(){
 
 
 function store(){
-    /*$.ajax({
+    $.ajax({
     type : "POST",
     url : "php/ajax.php",
     data : {
         json : localStorage.getItem("jsonString")
     }
-});*/
+});
    
     //console.log(localStorage.getItem("jsonString"));
 }
