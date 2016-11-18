@@ -426,7 +426,7 @@ console.log(ifArray, thenArray);
       ausgabe = ausgabe + 'ITEM (';
       var lines = ifArray[i].children[2].value.split('\n');
       for(var j = 0;j < lines.length;j++){
-        lines[j] = lines[j].replace("==", "IS");
+        lines[j] = lines[j].replace(/==/g, "IS");
         if(j+1 != lines.length)
           ausgabe = ausgabe + lines[j] +' \n\t\t&& ';
         else
@@ -445,7 +445,7 @@ console.log(ifArray, thenArray);
       for(var j = 0;j < lines.length;j++){
 
         if(lines[j].includes("==")){
-          lines[j] = lines[j].replace("==", "IS");
+          lines[j] = lines[j].replace(/==/g, "IS");
           if(lines[j+1].includes(" = ")){
             ausgabe = ausgabe + lines[j] +') \n\t\t';
           }else{
