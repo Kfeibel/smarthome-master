@@ -349,6 +349,16 @@ p{
     font-size: small;
     color: #3d4552;
 }
+.radioConcat{
+    font-size: small;
+    padding: 2px;
+    min-width: 50px;
+    width: 25%;
+    max-width: 80px;
+    outline: none !important;
+}
+
+
 
 
 @media only screen and (orientation:portrait) and (max-width: 450px){

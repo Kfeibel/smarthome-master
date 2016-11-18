@@ -35,6 +35,7 @@
   <p id="info_go_on">Sie können den Befehl noch editieren oder direkt 'Fortfahren'.</p>
   <p id="info_no_intent" style="color: #a01616;">Es wurde keine Absicht erkannt.</p>
   <p id="info_no_where" style="color: #a01616;">Es wurde keine Ort erkannt.</p>
+  <p id="info_no_state" style="color: #a01616;">Es wurde keine Status erkannt.</p>
   <p id="info_denied">Permission to use microphone was denied.</p>
   <p id="info_blocked">Permission to use microphone is blocked. To change,
     go to chrome://settings/contentExceptions#media-stream</p>
@@ -95,6 +96,8 @@ var ignore_onend;
 var start_timestamp;
 var buttonType;
 var globalIndex = 0;
+var ifArray = new Array, thenArray = new Array;
+var ifCheckPointer = 0, thenCheckPointer = 0;
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {
@@ -250,7 +253,7 @@ function fireCall(){
   dataType: 'jsonp',
   method: 'GET',
   success: function(response) {
-    console.log("success!", response);
+    //console.log("success!", response);
       var entities = response.entities;
       if(Object.keys(entities).length==0){
         showInfo('info_no_parity');
@@ -279,23 +282,28 @@ function fireCall(){
       }  
      
       if (response.entities.intent[0].value === 'toggle_light') {
+        if(!("where" in entities)){
+          showInfo('info_no_state');
+          return;
+        } 
         $('#'+textid).val('type == led || type == lamp\n');
         $('#'+textid).val($('#'+textid).val() + 'where == ' + response.entities.where[0].value+ '\n' );
-        $('#'+textid).val($('#'+textid).val() + 'state ' + tempEqual + response.entities.on_off[0].value + '\n' );
+        $('#'+textid).val($('#'+textid).val() + 'state ' + tempEqual + response.entities.on_off[0].value );
         
       }
       if (response.entities.intent[0].value === 'heather_controll') {
         $('#'+textid).val('type == heater\n');
         $('#'+textid).val($('#'+textid).val() + 'where == ' + response.entities.where[0].value + '\n');
         
-        if (!(response.entities.on_off === undefined)){
-          $('#'+textid).val($('#'+textid).val() + 'state '+ tempEqual + response.entities.on_off[0].value + '\n' );
-        }
-        
         if (!(response.entities.temperature === undefined)){
-          $('#'+textid).val($('#'+textid).val() + 'temperature '+ tempEqual + response.entities.temperature[0].value + '\n' );
-        }
+          $('#'+textid).val($('#'+textid).val() + 'temperature '+ tempEqual + response.entities.temperature[0].value );
+        }else{
+          if (!(response.entities.on_off === undefined)){
+            $('#'+textid).val($('#'+textid).val() + 'state '+ tempEqual + response.entities.on_off[0].value);
+          }
+        }     
       }
+
       if ( $('#left_col').children().length > 0  && $('#right_col').children().length > 0) {
           $('#createRule').removeAttr('disabled');
         }
@@ -309,8 +317,12 @@ function createSpan(){
 
   var span = document.createElement("span");
   span.setAttribute("class", "glyphicon glyphicon-remove");
-  span.setAttribute("style", "vertical-align: middle; color: #343d58;" );
-  span.setAttribute("onclick", "removeDivBox('#div"+globalIndex+"' )");
+  span.setAttribute("style", "vertical-align: middle; color: #343d58; cursor: hand;" );
+  if(buttonType == 1){
+    span.setAttribute("onclick", "removeDivBox('#div"+globalIndex+"', 1 )");
+  }else{
+    span.setAttribute("onclick", "removeDivBox('#div"+globalIndex+"', 2 )");
+  }
     
 
   var textarea = document.createElement("textarea");
@@ -318,26 +330,165 @@ function createSpan(){
   textarea.setAttribute("class", "if_then_box");
   textarea.setAttribute("readonly", "true");
 
+  var divRadio = document.createElement("div");
+  divRadio.setAttribute("class", "btn-group");
+  divRadio.setAttribute("id", "radioDiv"+globalIndex);
+  divRadio.setAttribute("data-toggle", "buttons");
+  divRadio.setAttribute("style", "display: none;    width: 100%; margin: 5px 0px")
+
+  var label = document.createElement("label");
+  label.setAttribute("class", "radioConcat btn btn-primary active");
+
+  var input = document.createElement("input");
+  input.setAttribute("type", "radio");
+  input.setAttribute("name", "options");
+  input.setAttribute("id", "option1"+globalIndex);
+  input.setAttribute("autocomplete", "off");
+  input.setAttribute("checked", "true");
+  label.innerHTML = 'Und';
+
+  var label2 = document.createElement("label");
+  label2.setAttribute("class", "radioConcat btn btn-primary");
+
+  var input2 = document.createElement("input");
+  input2.setAttribute("type", "radio");
+  input2.setAttribute("name", "options");
+  input2.setAttribute("id", "option2"+globalIndex);
+  input2.setAttribute("autocomplete", "off");
+  label2.innerHTML = 'Oder';
+
+  
+
+
   if(buttonType == 1){
+    label.appendChild(input);
+    divRadio.appendChild(label);
+    label2.appendChild(input2);
+    divRadio.appendChild(label2);
+    div.appendChild(divRadio);
     div.appendChild(span);
     div.appendChild(textarea);
     left_col.appendChild(div);
+    ifArray.push(div);
+
   }else{
     div.appendChild(textarea);
     div.appendChild(span);
     right_col.appendChild(div);
+    thenArray.push(div);
+
   }
+
+  if ( $('#left_col').children().length > 1 ) {
+    var divId = "#radioDiv"+(globalIndex);
+    $(divId).show();
+  }
+
   globalIndex++;
 
   return "textarea"+ (globalIndex-1); 
 }
 
-function createRule(){
-  alert('Mit den angegebenen Bedingungen und den gewünschten Aktionen, können Regeln mit vielen Abhängigkeiten automatsch erstellt werden');
+function calculateCheckposition(checkArray, numberToCheck){
+  var pointer = 0;
+  
+  for(var i = pointer; i < checkArray.length; i++ ){
+    if(checkArray[i] == -1){
+      pointer ++;
+    }else{
+      pointer = i;
+      i=NaN;
+    }
+  }
+  if(numberToCheck==1){
+    ifCheckPointer = pointer;
+  }else{
+    thenCheckPointer = pointer;
+  }
 }
 
-function removeDivBox(idDivBox){
+function createRule(){
+console.log(ifArray, thenArray);
+  var ausnahme = 0;
+  var ausgabe = '';
 
+  ausgabe = 'IF \n\t';
+  
+  for(var i = 0 ; i < ifArray.length; i++){
+    if(ifArray[i]!= -1){
+      if(ausnahme !=0){
+       if ($( 'label.active', $( "#"+ifArray[i].children[0].id ) ).text () == 'Und'){
+        ausgabe = ausgabe + 'AND \n\n\t';
+       }else{
+        ausgabe = ausgabe + 'OR \n\n\t';
+       }
+      }
+      ausgabe = ausgabe + 'ITEM (';
+      var lines = ifArray[i].children[2].value.split('\n');
+      for(var j = 0;j < lines.length;j++){
+        lines[j] = lines[j].replace("==", "IS");
+        if(j+1 != lines.length)
+          ausgabe = ausgabe + lines[j] +' \n\t\t&& ';
+        else
+          ausgabe = ausgabe + lines[j] +') \n\n\t';
+      }
+      ausnahme++;
+    }
+  }
+  ausgabe = ausgabe +'\nTHEN \n\t';
+  for(var k = 0 ; k < thenArray.length; k++){
+    if(thenArray[k]!= -1){
+      
+      ausgabe = ausgabe + 'ITEM (';
+      
+      var lines = thenArray[k].children[0].value.split('\n');
+      for(var j = 0;j < lines.length;j++){
+
+        if(lines[j].includes("==")){
+          lines[j] = lines[j].replace("==", "IS");
+          if(lines[j+1].includes(" = ")){
+            ausgabe = ausgabe + lines[j] +') \n\t\t';
+          }else{
+            ausgabe = ausgabe + lines[j] +' \n\t\t&& '; 
+          }
+
+        }else if(lines[j].includes(" = ")){
+          lines[j] = lines[j].replace(" = ", " TO ");
+          ausgabe = ausgabe + lines[j] +' \n\n\t';
+        }           
+      }
+    }
+  }
+
+
+
+  alert(ausgabe);
+}
+
+function removeDivBox(idDivBox , numberToCheck){
+  console.log(idDivBox, thenArray[0].id);
+  if(numberToCheck == 1){
+    for(var i = 0 ; i< ifArray.length; i++){
+      if('#'+ifArray[i].id == idDivBox){
+        console.log(ifArray);
+        ifArray[i]=-1;
+      }
+    } 
+    calculateCheckposition(ifArray,numberToCheck)
+    if ( $('#left_col').children().length = 1 ) {
+      var divId = "#radioDiv"+(ifCheckPointer);
+      $(divId).hide();
+    }
+  } else{
+    for(var i = 0 ; i< thenArray.length; i++){
+      if('#'+thenArray[i].id == idDivBox){
+        console.log(ifArray);
+        thenArray[i]=-1;
+      }
+    }
+    calculateCheckposition(thenArray,numberToCheck)
+  }
+  
   $(idDivBox).remove();
   
   if ( $('#left_col').children().length <= 0  || $('#right_col').children().length <= 0) {
