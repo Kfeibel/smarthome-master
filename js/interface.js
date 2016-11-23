@@ -54,7 +54,10 @@ function store(){
     url : "php/ajax.php",
     data : {
         json : localStorage.getItem("jsonString")
-    }
+    },
+    success: function(data) {
+        console.log(data);
+   }
 });
    
     //console.log(localStorage.getItem("jsonString"));
