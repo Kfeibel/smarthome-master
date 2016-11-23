@@ -5,7 +5,7 @@
    if (json_decode($json) != null)
    {
      $file = fopen('../json/devices.json','w+');
-     var_dump($json); 
+     //var_dump($json); 
      fwrite($file, $json);
      fclose($file);
    }

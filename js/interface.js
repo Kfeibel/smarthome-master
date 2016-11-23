@@ -56,8 +56,8 @@ function store(){
         json : localStorage.getItem("jsonString")
     },
     success: function(data) {
-        console.log(data);
-   }
+        //console.log(data);
+   },
 });
    
     //console.log(localStorage.getItem("jsonString"));
