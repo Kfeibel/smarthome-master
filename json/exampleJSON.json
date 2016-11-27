@@ -7,7 +7,8 @@
 			"arucoid" : "1023",
 			"dim" : "100",
 			"color" : "#ffffcc",
-			"state" : "on"
+			"state" : "on",
+			"where" : "Badezimmer"
 		},
 		{
 			"id" : "2",
@@ -16,7 +17,8 @@
 			"arucoid" : "150",
 			"dim" : "50",
 			"color" : "#ffffcc",
-			"state" : "on"
+			"state" : "on",
+			"where" : "Wohnzimmer"
 		}
 	],
 	"Heizungen" : [
@@ -26,7 +28,8 @@
 			"name" : "Heizung Bad",
 			"arucoid" : "34",
 			"temperature" : "22",
-			"state" : "on"
+			"state" : "on",
+			"where" : "Badezimmer"
 		},
 		{
 			"id" : "4",
@@ -34,7 +37,8 @@
 			"name" : "Heizung Küche",
 			"arucoid" : "",
 			"temperature" : "18",
-			"state" : "on"
+			"state" : "on",
+			"where" : "Küche"
 		}
 	]
 }

@@ -10,6 +10,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="js/cv.js"></script> 
   <script type="text/javascript" src="js/interface.js"></script> 
+  <script type="text/javascript" src="js/initiation.js"></script> 
   <script type="text/javascript" src="js/aruco.js"></script> 
   <script type="text/javascript" src="js/device.js"></script> 
   <script type="text/javascript" src="js/jscolor.js"></script> 
@@ -215,7 +216,7 @@
         
         function successCallback(stream){
           if (window.URL) {
-            console.log('test');
+            //console.log('test');
             video.src = window.URL.createObjectURL(stream);
             track = stream.getTracks()[0];
             //console.log(stream, track);
