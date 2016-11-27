@@ -22,7 +22,7 @@
     <div class="content">
         <div class="table">
             <div class="table-cell">
-                    Augmented Reality
+                    Steuerung per Augmented Reality
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
     <div class="content">
         <div class="table">
             <div class="table-cell">
-                Sprach Steuerung
+                Regeln per Sprache
             </div>
         </div>
     </div>
@@ -57,12 +57,15 @@
 
 
 <script>
+/*
+  Wenn das Fenster geladen wird, wird überprüft, ob das Attribut 'alreadyClicked' bereits gesetzt wurde
+  Falls nicht, werden alle Daten für die verwendung geladen und vorbereitet.
+*/
   if (!sessionStorage.alreadyClicked) {
     window.onload = function(){
       //console.log('test1');
       initObjects();
     }
-
     sessionStorage.alreadyClicked = 1;
   }
   </script>

@@ -56,7 +56,9 @@
 
 <script>
   var arucoListe = new Array, check = false;
-      
+    /* 
+        Wenn das Fenster geladen wird, werden alle Devices mit getAllDevices() aus der lokalen DB geholt und mit createItem() dynmisch angezeigt. Des weiteren wir eine List dmit allen verwendeten ArUco-IDs erstellt.
+    */
      window.onload = function(){
         var devices = getAllDevices();
         for(var i = 0 ; i<devices.length ; i++){
@@ -66,8 +68,11 @@
 
      } 
 
+    /* 
+        Erzeugt dynamisch für ein übergebenes Device(Objekt) ein Element und stellt es auf der Oberfläche dar
+        @param device Objekt eines Gegenstandes mit allen Eigenschaften
+    */
     function createItem(device){
-        //console.log(device);
 
         var div = document.createElement("div");
         div.setAttribute("class", "square bg");
@@ -93,9 +98,15 @@
         div2.appendChild(div3);
         div.appendChild(div2);
         document.body.appendChild(div);
-
     }
 
+
+    /*
+        Öffnet das Modal zum Verändern der ArUco-ID und ruft die Methode zum Zeichnen des alten Markers auf.
+        @param item Item welches die Funktion aufgerufen hat
+        @param name Name des zu verändernden Devices
+        @param itemid ID des zu verändernden Devices
+    */
     function openModal(item, name, itemid){
         $('.modal-title').text(name);
 
@@ -105,6 +116,10 @@
         $('#myModal').modal('toggle');
     }
 
+    /*
+        Zeichnet den Marker zu einer gegebenen ArUco-ID in den vorgegebenen Bereich
+        @param itemId ArUco-ID die gezeichnet werden soll
+    */
     function drawArucoMarker(itemId){
 
         var canvas = document.getElementById('arucoCode');
@@ -122,6 +137,10 @@
         }   
     }
 
+    /*
+        Überprüft ob die eingegebene ArUco-ID gültig ist. gültig bedeuted zwischen 0 und 1023 und nicht bereits vergeben
+        @param type Zur Kontrolle, von wo diese Funktion augerufen wurde.
+    */
     function checkID(type){
         var oldid = $('#myModal').attr('arucoid');
         
@@ -152,6 +171,9 @@
         }
     }
 
+    /*
+        Ändert die neu eingestellten ArUco-ID in den DBs
+    */
     function changeArucoMarker(){
         var itemid = $('#myModal').attr('itemid');
         var newid = $('#arucoID').val();

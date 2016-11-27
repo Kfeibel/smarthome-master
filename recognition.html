@@ -79,6 +79,9 @@
 <script>
     var video, track, canvas, context, imageData, detector, items, rectPos = new Array, index, chosenRect= -1;
 
+    /*
+        Wenn das Fenster geladen wird, werden alle Devices mit getAllDevices() aus der lokalen DB geholt und in einen Array des Formats Array[ArUco-Id]=Device. Außerdem werden die spezifischen onclick Methoden Marker-Funktionen definiert
+    */ 
     window.onload = function(){
       
       items = new Array(1024);
@@ -190,7 +193,13 @@
         $('#temperature').hide();
       });
     }
-  
+
+    /*
+        Initialisiert das Video, das Canvas und den Context des Canvas. Nach Überprüfung, ob eine Verbindung mit der Kamera
+        hergestellt werden kann werden Success und Error handling Methoden definiert. Es wird eine Verbindung zur Kamera aufgebaut
+        und ein Stream der Aufnahme gestartet. Nachdem ein Marker Detektor initialisiert wurde, wird das Bild zum ersten Mal
+        gezeichnet und eine Endlosschleife zum wiederholten Zeichnen gestartet.
+    */
     function startStream(){
       video = document.getElementById("video");
       canvas = document.getElementById("canvas");
@@ -225,23 +234,6 @@
         function errorCallback(error){
           console.log(error);
         }
-
-
-    /*if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-        console.log("enumerateDevices() not supported.");
-        return;
-     }
-    // List cameras and microphones.
-
-    navigator.mediaDevices.enumerateDevices().then(function(devices) {
-        devices.forEach(function(device) {
-            console.log(device.kind + ": " + device.label +
-            " id = " + device.deviceId);
-        });
-      }).catch(function(err) {
-        console.log(err.name + ": " + error.message);
-      });*/
-
         
         navigator.getUserMedia({ video: {facingMode: "environment"} }, successCallback, errorCallback);
         
@@ -253,13 +245,18 @@
       }
     }
 
+    /*
+        Beendet den aufgenommenen Stream der Kamera und endet die zeichnung auf der Oberfläche
+    */
     function stopStream(){
       track.stop();
       document.getElementById("canvas").style.visibility = "hidden" ;
 
     }
     
-    
+    /*
+        Rekursive Funktion. Endlosschleife, die für ein Bild der Aufnahme die die Amrkererkennung und Zeichnung veranlasst (insgesamt für alle Bilder der Aufnahme).
+    */
     function tick(){
       requestAnimationFrame(tick);
       
@@ -274,11 +271,18 @@
       }
     }
 
+    /*
+        Zeichnet das aktuelle Bild des Videos in den context des Canvas
+    */
     function snapshot(){
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     }
-          
+     
+    /*
+        Zeichnet die Grenzen eines gefundenen Markers in rot in den Context des Canvas
+        @param markers List der gefundenen Marker im Stream.
+    */     
     function drawCorners(markers){
       var corners, corner, i, j;
     
@@ -305,6 +309,11 @@
       }
     }
 
+    /*
+        Zeichnet die ID oder den Namen zu einem gefundenen Markers in den Context des Canvas. Die Position ist dabei immer
+        abhängig der Position des Markers
+        @param markers List der gefundenen Marker im Stream.
+    */ 
     function drawIdOrName(markers){
       var corners, corner, xMin, yMin, xMax, yMax, i, j, k;
       index = 0;
@@ -356,6 +365,15 @@
       }
     }
 
+    /*
+        Zeichnet die Rechtecke und die Funktionen gefundener Marker in den Context des Canvas. Die Größe des Rechtecks ist
+        dynamisch und richtet sich nach dem benötigten Platz und der Schriftgröße.
+        @param text Text der Funktion, der geschrieben werden soll.
+        @param x X Position für das Zeichnen.
+        @param y Y Position für das Zeichnen.
+        @param type Zur Kontrolle, von wo diese Funktion augerufen wurde.
+        @param id ID des zugehörigen Markers.
+    */ 
     function drawRect(text, x, y, type, id){
       var type = type || 0;
       var length = text.length;
@@ -398,10 +416,17 @@
       }
     }
 
+    /*
+        Veränder die Farbe der Preview des Farbpickers
+        @param jscolor Farbe aus dem Inupt des Modals.  
+    */ 
     function update(jscolor) {
       document.getElementById('rect').style.backgroundColor = '#' + jscolor
     }
 
+    /*
+        Speichert getätigte Veränderungen von Devices in den DBs und dem Smarthome System
+    */ 
     function changeItemData(){
         updateData($('#changeData').val(), items[chosenRect].id, $('#changeData').attr('changeAttr'));
         items[chosenRect][$('#changeData').attr('changeAttr')] = $('#changeData').val();

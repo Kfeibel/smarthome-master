@@ -26,7 +26,9 @@
 </textarea>
 
 <script>
-      
+      /*
+        Wenn das Fenster geladen wird, werden alle Devices mit getAllDevices() aus der lokalen DB geholt und mit createItem() dynmisch angezeigt.
+      */
      window.onload = function(){
       $('#myTextarea').height('70%');// - $('#headline').height());
       $("#myTextarea").val("Bekannte Geräte und ihre aktuellen Einstellungen: \n\n");
@@ -37,6 +39,10 @@
       }
      } 
 
+      /*
+        Erzeugt dynamisch für ein übergebenes Device(Objekt) ein Textbereich im Textarea der Seite und stellt es auf der Oberfläche dar
+        @param device Objekt eines Gegenstandes mit allen Eigenschaften
+      */
     function createItem(device){
       if (device.type == 'led') {
         $("#myTextarea").val($("#myTextarea").val() + ' ID: ' + device.id + ' - ' +device.name +  ' :\n\tType: '+ device.type +  '\n\tOrt: ' + device.where +'\n\tArUcoID: ' + device.arucoid + '\n\tStatus: '+ device.state + '\n\tIntensität: ' + device.dim + '%\n\tFarbe: #'+ device.color + '\n\n' );

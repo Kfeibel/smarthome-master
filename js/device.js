@@ -1,4 +1,6 @@
-
+/*
+'Klassen' der intelligenten Geräte und ihre spezifischen Funktionene. Aktuell für Dummy Komponente Lamp und Heater
+*/
 
 var Lamp = function (id, type, name, arucoid, dim, color, state, functions,where) {
   this.id = id;
