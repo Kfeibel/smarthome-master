@@ -112,6 +112,7 @@ if (!('webkitSpeechRecognition' in window)) {
   recognition.continuous = true;
   //recognition.interimResults = true;
 
+  // wird beim Starten der Erkennung aufgerufen
   recognition.onstart = function() {
     recognizing = true;
     showInfo('info_speak_now');
@@ -122,6 +123,7 @@ if (!('webkitSpeechRecognition' in window)) {
     }
   };
 
+  // wird beim Auftreten eines Fehlers bei der Erkennung aufgerufen
   recognition.onerror = function(event) {
     if (event.error == 'no-speech') {
       start_img.src = 'mic.gif';
@@ -145,6 +147,7 @@ if (!('webkitSpeechRecognition' in window)) {
     }
   };
 
+  // wird beim Beenden der Erkennung aufgerufen
   recognition.onend = function() {
     recognizing = false;
     if (ignore_onend) {
@@ -161,6 +164,7 @@ if (!('webkitSpeechRecognition' in window)) {
     continueButtondiv.style.display='block';
   };
 
+  // wird beim Erhalten eines Ergebnis der Erkennung aufgerufen
   recognition.onresult = function(event) {
     //var interim_transcript = '';
     for (var i = event.resultIndex; i < event.results.length; ++i) {
@@ -270,6 +274,8 @@ function fireCall(){
   method: 'GET',
   success: function(response) {
     //console.log("success!", response);
+
+      // Vollständige Verarbeitung des Erkannten Textes
       var entities = response.entities;
       if(Object.keys(entities).length==0){
         showInfo('info_no_parity');

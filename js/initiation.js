@@ -50,7 +50,7 @@ function updateData(newVal, itemid, field){
     var jsonString = JSON.stringify(jsObject) ;
     localStorage.setItem("jsonString", jsonString);
     store();
-    setElementState();
+    if (field != 'arucoid') setElementState();
 }
 
 /*

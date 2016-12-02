@@ -236,13 +236,13 @@
           console.log(error);
         }
         
-        navigator.getUserMedia({ video: {facingMode: "environment"} }, successCallback, errorCallback);
+        navigator.getUserMedia({ video: {facingMode: "environment"} }, successCallback, errorCallback); //Zugriff auf Kamera 
         
-        detector = new AR.Detector();
+        detector = new AR.Detector(); //Definiere Markererkenner
 
         document.body.scrollTop = document.body.scrollHeight - document.body.clientHeight;
     
-        requestAnimationFrame(tick);
+        requestAnimationFrame(tick); //Rufe rekursive Funktion zum Zeichnen des erweiterten Bildes
       }
     }
 
@@ -262,12 +262,12 @@
       requestAnimationFrame(tick);
       
       if (video.readyState === video.HAVE_ENOUGH_DATA){
-        snapshot();
+        snapshot(); //Zeichne das aktuelle Bild des Videos
 
-        var markers = detector.detect(imageData);
-
-        drawCorners(markers);
-        drawIdOrName(markers);
+        var markers = detector.detect(imageData); //Untersuche das Bild auf Marker
+        //console.log(markers);
+        drawCorners(markers); //zeichne Kanten der gefundenen Marker
+        drawIdOrName(markers); //zeichne ID oder Name der gefundenen Marker
         
       }
     }
