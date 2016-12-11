@@ -275,22 +275,22 @@ function fireCall(){
   success: function(response) {
     //console.log("success!", response);
 
-      // Vollständige Verarbeitung des Erkannten Textes
+      // Vollständige Verarbeitung des Erkannten Textes / der Entitäten
       var entities = response.entities;
-      if(Object.keys(entities).length==0){
+      if(Object.keys(entities).length==0){ //stoppe falls keine Entität gefunden wurde
         showInfo('info_no_parity');
         return;
       }
 
-      if(!("intent" in entities)){
+      if(!("intent" in entities)){ // stoppe falls keine Absicht gefunden wurde
         showInfo('info_no_intent');
         return;
       }
-      if(!("where" in entities)){
+      if(!("where" in entities)){ // stoppe falls kein Ort gefunden wurde
         showInfo('info_no_where');
         return;
       }
-      if(response.entities.intent[0].confidence < 0.8){
+      if(response.entities.intent[0].confidence < 0.8){ // stoppe falls Sicherheit unter 80% liegt
         showInfo('info_no_intent');
         return;
       }
@@ -302,7 +302,7 @@ function fireCall(){
       }else{
         var tempEqual = '= ';
       }  
-     
+     //Forme Entitäten zu Pseudocode um
       if (response.entities.intent[0].value === 'toggle_light') {
         if(!("where" in entities)){
           showInfo('info_no_state');
