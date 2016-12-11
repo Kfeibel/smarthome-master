@@ -28,7 +28,7 @@
 
 <script>
       /*
-        Wenn das Fenster geladen wird, werden alle Devices mit getAllDevices() aus der lokalen DB geholt und mit createItem() dynmisch angezeigt.
+        When the page gets loaded, all devices get loaded from the local DB with getAllDevices() and displayed with createItem().
       */
      window.onload = function(){
       $('#myTextarea').height('70%');// - $('#headline').height());
@@ -41,8 +41,8 @@
      } 
 
       /*
-        Erzeugt dynamisch für ein übergebenes Device(Objekt) ein Textbereich im Textarea der Seite und stellt es auf der Oberfläche dar
-        @param device Objekt eines Gegenstandes mit allen Eigenschaften
+         Creates dynamically a textpart in the textarea of the page for a given Device(Objekt) and displays it on the screen.
+        @param device Objekt of a device with its settings
       */
     function createItem(device){
       if (device.type == 'led') {

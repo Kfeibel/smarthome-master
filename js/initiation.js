@@ -1,14 +1,13 @@
 /*
-    Initialisiert die lokale Datenbank und die Datenbank des Servers. Es werden alle Daten von der Interface.js
-    und dem Server geholt. Daraufhin werden die Daten verglichen, um bereits vorher zugewiesene ArUco-Marker zu übernehmen
-    und im Anschluss auf dem Server und im lokalen Speicher abgespeichert. Diese Methode wird nur einmal pro Browser 
-    Session aufgerufen
+    Initializes the server's database and local database. All data are fetched from the interface.js and the server. 
+    The data are then compared to take over previously assigned ArUco markers and are then stored on the server and in the local memory. 
+    This method is called only once per browser session
 */
 function initObjects(){
-    var dataAPI = getAllElements();                             //läd Daten des Smarthome Systems
+    var dataAPI = getAllElements();                             //Loads data from the Smart Home system
     var dataSever;
     
-    $.ajax({                                                    // läd Daten des Servers
+    $.ajax({                                                    // Loads data from the server
         url: 'json/devices.json',
         async: false,
         data: {
@@ -24,11 +23,11 @@ function initObjects(){
         type: 'GET'
     });
 
-    if(dataAPI != null && dataSever != null){                   // Falls beide Daten vorhanden sind
-        var objResult = findObject(dataAPI, dataSever, 'id');   // Suche übereinstimmende Geräte IDs und übernehme deren ArUcoMarker
+    if(dataAPI != null && dataSever != null){                   // If both data are present
+        var objResult = findObject(dataAPI, dataSever, 'id');   // Search matching device IDs and adopt their ArUco Marker
         var jsonString = JSON.stringify(objResult) ;
-        localStorage.setItem("jsonString", jsonString);         //Speichere die Daten lokal im Browser
-        store();                                                //Speichere die Daten auf dem Server
+        localStorage.setItem("jsonString", jsonString);         //Save the data locally in the browser
+        store();                                                //Save the data on the server
     }else{
         var jsonString = JSON.stringify(dataAPI) ;
         localStorage.setItem("jsonString", jsonString);
@@ -38,10 +37,10 @@ function initObjects(){
 }
 
 /*
-    Holt die Daten aus dem lokalen Speicher, aktualisiert sie und speichert sie wieder im lokalen Speicher und auf dem Server ab.
-    @param newVal Neuer Wert für ein gegebenes Feld
-    @param itemid ID des zu verändernden Gerätes
-    @param field Das zu verändernde Feld
+    Fetches the data from the local storage, updates it, and saves it back to local storage and to the server.
+    @param newVal New value for a given field
+    @param itemid ID of the device to be modified
+    @param field The field to be changed
 
 */
 function updateData(newVal, itemid, field){
@@ -54,9 +53,8 @@ function updateData(newVal, itemid, field){
 }
 
 /*
-    Holt alle Daten aus dem lokalen Speicher und gibt sie als JSON-Objekt zurück. Beinhaltet alle intelligenten 
-    Geräte.
-    @return jsObject Inhalt des Lokalen Speichers als JSON Objekt
+    Retrieves all data from the local store and returns it as a JSON object. Includes all intelligent devices.
+    @return jsObject Content of the local store as a JSON object
 */
 function get(){
      var jsObject = JSON.parse( localStorage.getItem("jsonString") );
@@ -64,7 +62,7 @@ function get(){
 }
 
 /*
-    Ruft ein PHP-Script auf, um die Daten des lokalen Speichers auf dem Server zu speichern
+    Invokes a PHP script to store the local memory data on the server
 */
 function store(){
     $.ajax({
@@ -80,10 +78,10 @@ function store(){
 }
 
 /*
-    Funktion zum finden gleicher Key-Value Paare in 2 unterschiedlichen JSON Objekten.
-    @param obj JSON - Objekt aller intelligenten Geräte aus der interface.js
-    @param obj2 JSON - Objekt aller intelligenten Geräte vom Server
-    @param key Das zu findende Feld
+    Function to find the same key-value pair in 2 different JSON objects.
+    @param obj JSON - object one
+    @param obj2 JSON - object two
+    @param key The field to be found
 */
 function findObject(obj,obj2, key) {
 
@@ -101,13 +99,12 @@ function findObject(obj,obj2, key) {
 }
 
 /*
-    Rekursive Funktion die das gegebene JSON-Objekt alle intelligenten Geräte rekursiv durchläuft, um den zu ändernden Wert
-    an seine dafür vorgesehene Stelle zu schreiben.
-    @param obj JSON - Objekt aller intelligenten Geräte
-    @param key Das zu findende Feld
-    @param val Der gesuchte Wert des zu findenden Feldes
-    @param newVal Neuer Wert für ein gegebenes Feld
-    @param changeVal Das zu verändernde Feld
+    Recursive function that recursively runs the given JSON object of all intelligent devices to write the value to be changed to its intended location.
+    @param obj JSON - object of all intelligent devices
+    @param key The field to be found
+    @param val The value of the field to be found
+    @param newVal New value for the given field
+    @param changeVal The field to be changed
 */
 function getObjects(obj, key, val, newVal , changeVal) {
     var newValue = newVal;
@@ -124,9 +121,9 @@ function getObjects(obj, key, val, newVal , changeVal) {
 }
 
 /*
-    Erzeugt aus einem JSON-Objekt mit allen intelligenten Geräten ein Array aus einzelnen Objekten der Devices
-    @param o Json-Objekt der intelligenten Geräte
-    @return devices Alle Devices als einzelne Objekte in einem Array
+    Generates from an JSON object with all intelligent devices, an array of individual objects of the devices
+    @param o Json object of the intelligent devices
+    @return devices All devices as individual objects in an array
 */
 function createObjektArray(o) {
    var devices = new Array;
@@ -160,8 +157,8 @@ function createObjektArray(o) {
 }  
 
 /*
-    Holt alle Devices als JSON aus dem Speicher und gibt diese als Objekte zurück
-    @return devices Alle Devices als einzelne Objekte in einem Array
+    Retrieves all devices as JSON from memory and returns them as objects
+    @return devices All devices as individual objects in an array
 */
 function getAllDevices(){
         var devices = new Array;

@@ -101,7 +101,7 @@ var ifArray = new Array, thenArray = new Array;
 var ifCheckPointer = 0, thenCheckPointer = 0;
 
 /*
-  Initialisiert die Spracherkennung und definiert das Handling bei Erfolg oder Error
+  Initializes the speech recognition and defines the handling on success or error
 */
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
@@ -112,7 +112,7 @@ if (!('webkitSpeechRecognition' in window)) {
   recognition.continuous = true;
   //recognition.interimResults = true;
 
-  // wird beim Starten der Erkennung aufgerufen
+  // Is called when the detection is started
   recognition.onstart = function() {
     recognizing = true;
     showInfo('info_speak_now');
@@ -123,7 +123,7 @@ if (!('webkitSpeechRecognition' in window)) {
     }
   };
 
-  // wird beim Auftreten eines Fehlers bei der Erkennung aufgerufen
+  // Is called when an error occurs during detection
   recognition.onerror = function(event) {
     if (event.error == 'no-speech') {
       start_img.src = 'mic.gif';
@@ -147,7 +147,7 @@ if (!('webkitSpeechRecognition' in window)) {
     }
   };
 
-  // wird beim Beenden der Erkennung aufgerufen
+  // Is called when the detection is terminated
   recognition.onend = function() {
     recognizing = false;
     if (ignore_onend) {
@@ -164,7 +164,7 @@ if (!('webkitSpeechRecognition' in window)) {
     continueButtondiv.style.display='block';
   };
 
-  // wird beim Erhalten eines Ergebnis der Erkennung aufgerufen
+  // Is called upon obtaining a result of the detection
   recognition.onresult = function(event) {
     //var interim_transcript = '';
     for (var i = event.resultIndex; i < event.results.length; ++i) {
@@ -185,7 +185,7 @@ if (!('webkitSpeechRecognition' in window)) {
   };
 }
 /*
-    Zeigt Infotext, dass WebSpeechRecognition in diesem Browser nicht vorhanden ist
+    Shows Infotext that WebSpeechRecognition does not exist in this browser
 */
 function upgrade() {
   start_button.style.visibility = 'hidden';
@@ -205,9 +205,9 @@ function capitalize(s) {
 }
 
 /*
-    Startet oder stoppt die Aufnahme mit dem Microfone, abhängig des aktuellen Status.
-    @param event Onclick-Event des gedrückten Buttons
-    @param typeButton Zur unterscheidung des gedrückten Buttons: 1 für WENN; 2 für DANN
+   Starts or stops the recording with the microphone, depending on the current status.
+    @param event Onclick-Event of the pressed button
+    @param typeButton To distinguish the pressed button: 1 for IF; 2 for THEN
 */
 function startButton(event , typeButton) {
   if (recognizing) {
@@ -235,8 +235,8 @@ function startButton(event , typeButton) {
 }
 
 /*
-    Stellt die Nachricht mit der Übergebenen ID auf dem Bildschimr dar.
-    @param s ID der darzustellenden Nachricht
+    Displays the message with the passed ID on the screen.
+    @param s ID of the displayed message
 */
 function showInfo(s) {
   if (s) {
@@ -253,8 +253,7 @@ function showInfo(s) {
 
 
 /*
-  Gibt den aufgenommenen Text mit einem Request an wit.ai (künstliche Intelligenz) welche die Sprachanalyse übernimmt.
-  Bei erfolgreicher Rückgabe wird das Resultat überprüft, formatiert und die Darstellung angewiesen 
+  Gives the recorded text with a request to wit.ai (artificial intelligence) which analyses the speech. If the return is successful, the result is checked, formatted and displayed 
 */
 function fireCall(){
   var message;
@@ -275,22 +274,22 @@ function fireCall(){
   success: function(response) {
     //console.log("success!", response);
 
-      // Vollständige Verarbeitung des Erkannten Textes / der Entitäten
+      // Complete processing of the detected entities/text(s)
       var entities = response.entities;
-      if(Object.keys(entities).length==0){ //stoppe falls keine Entität gefunden wurde
+      if(Object.keys(entities).length==0){ //Stop if no entity has been found
         showInfo('info_no_parity');
         return;
       }
 
-      if(!("intent" in entities)){ // stoppe falls keine Absicht gefunden wurde
+      if(!("intent" in entities)){ // Stop if no intention was found
         showInfo('info_no_intent');
         return;
       }
-      if(!("where" in entities)){ // stoppe falls kein Ort gefunden wurde
+      if(!("where" in entities)){ // Stop if no location was found
         showInfo('info_no_where');
         return;
       }
-      if(response.entities.intent[0].confidence < 0.8){ // stoppe falls Sicherheit unter 80% liegt
+      if(response.entities.intent[0].confidence < 0.8){ // Stop if accuracy is less than 80%
         showInfo('info_no_intent');
         return;
       }
@@ -302,7 +301,7 @@ function fireCall(){
       }else{
         var tempEqual = '= ';
       }  
-     //Forme Entitäten zu Pseudocode um
+     //Transform entities to pseudocode
       if (response.entities.intent[0].value === 'toggle_light') {
         if(!("where" in entities)){
           showInfo('info_no_state');
@@ -334,7 +333,7 @@ function fireCall(){
 }
 
 /*
-  Resultat wird zu einem dynamischen Eement erstellt und auf der Oberfläche dargestellt 
+  Result is created to a dynamic element and displayed on the screen
 */
 function createSpan(){
   var div = document.createElement("div");
@@ -411,8 +410,7 @@ function createSpan(){
 }
 
 /*
-  Überprüft die Position der Auslösers oder der Aktion, um festzustellen, ob es sich um den ersten Auslöser oder die erste Aktion 
-  handelt. Die erste Aktion erhält keine und/oder verknüpfung.
+  Checks the position of the triggers or the action to determine if it is the first trigger or the first action. The first action does not get any and / or link.
 */
 function calculateCheckposition(checkArray, numberToCheck){
   var pointer = 0;
@@ -433,7 +431,7 @@ function calculateCheckposition(checkArray, numberToCheck){
 }
 
 /*
-  Erzeugt eine Regel als Beispielhaften Text aus allen vorher aufgenommenen Auslöser und Aktionen
+  Creates a rule as an example text from all previously recorded triggers and actions
 */
 function createRule(){
 //console.log(ifArray, thenArray);
@@ -492,8 +490,7 @@ function createRule(){
 }
 
 /*
-  Gibt den aufgenommenen Text mit einem Request an wit.ai (künstliche Intelligenz) welche die Sprachanalyse übernimmt.
-  Bei erfolgreicher Rückgabe wird das Resultat überprüft, formatiert und auf der Oberfläche dargestellt 
+  Removes one created trigger or action.
 */
 function removeDivBox(idDivBox , numberToCheck){
   console.log(idDivBox, thenArray[0].id);

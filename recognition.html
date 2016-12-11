@@ -81,7 +81,7 @@
     var video, track, canvas, context, imageData, detector, items, rectPos = new Array, index, chosenRect= -1;
 
     /*
-        Wenn das Fenster geladen wird, werden alle Devices mit getAllDevices() aus der lokalen DB geholt und in einen Array des Formats Array[ArUco-Id]=Device. Außerdem werden die spezifischen onclick Methoden Marker-Funktionen definiert
+        WWhen the page gets loaded, all devices get loaded from the local DB with getAllDevices() and saved in an Array of the format Array[ArUco-Id]=Device. Additionally the onclick methods of the Marker-Functions get defined.
     */ 
     window.onload = function(){
       
@@ -196,10 +196,7 @@
     }
 
     /*
-        Initialisiert das Video, das Canvas und den Context des Canvas. Nach Überprüfung, ob eine Verbindung mit der Kamera
-        hergestellt werden kann werden Success und Error handling Methoden definiert. Es wird eine Verbindung zur Kamera aufgebaut
-        und ein Stream der Aufnahme gestartet. Nachdem ein Marker Detektor initialisiert wurde, wird das Bild zum ersten Mal
-        gezeichnet und eine Endlosschleife zum wiederholten Zeichnen gestartet.
+        Initializes the video, canvas, and context of the canvas. After checking whether a connection to the camera can be established, success and error handling methods are defined. A connection to the camera is established and a stream of the recording is started. After a marker detector is initialized, the image is drawn for the first time and an endless loop for repeated drawing is started.
     */
     function startStream(){
       video = document.getElementById("video");
@@ -247,7 +244,7 @@
     }
 
     /*
-        Beendet den aufgenommenen Stream der Kamera und endet die zeichnung auf der Oberfläche
+        Exits the captured stream of the camera and ends the drawing on the surface
     */
     function stopStream(){
       track.stop();
@@ -256,24 +253,25 @@
     }
     
     /*
-        Rekursive Funktion. Endlosschleife, die für ein Bild der Aufnahme die die Amrkererkennung und Zeichnung veranlasst (insgesamt für alle Bilder der Aufnahme).
+        Recursive function. Endless loop, which starts for one frame of the video the marker detection and drawing on the screen 
+        (for all pictures of the recording).
     */
     function tick(){
       requestAnimationFrame(tick);
       
       if (video.readyState === video.HAVE_ENOUGH_DATA){
-        snapshot(); //Zeichne das aktuelle Bild des Videos
+        snapshot(); //Draw the current picture of the video
 
-        var markers = detector.detect(imageData); //Untersuche das Bild auf Marker
+        var markers = detector.detect(imageData); //Check the picture for markers
         //console.log(markers);
-        drawCorners(markers); //zeichne Kanten der gefundenen Marker
-        drawIdOrName(markers); //zeichne ID oder Name der gefundenen Marker
+        drawCorners(markers); //Draw edges of the found markers
+        drawIdOrName(markers); //Draw ID or name of the found markers
         
       }
     }
 
     /*
-        Zeichnet das aktuelle Bild des Videos in den context des Canvas
+        Draws the current image of the video in the context of the canvas
     */
     function snapshot(){
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -281,8 +279,8 @@
     }
      
     /*
-        Zeichnet die Grenzen eines gefundenen Markers in rot in den Context des Canvas
-        @param markers List der gefundenen Marker im Stream.
+        Draws the boundaries of a found marker in red in the context of the canvas
+        @param markers List of all found Markers imn the stream.
     */     
     function drawCorners(markers){
       var corners, corner, i, j;
@@ -311,9 +309,8 @@
     }
 
     /*
-        Zeichnet die ID oder den Namen zu einem gefundenen Markers in den Context des Canvas. Die Position ist dabei immer
-        abhängig der Position des Markers
-        @param markers List der gefundenen Marker im Stream.
+        Draws the ID or name to a found marker in the context of the canvas. The position is always dependent on the position of the marker
+        @param markers List of all found Markers imn the stream.
     */ 
     function drawIdOrName(markers){
       var corners, corner, xMin, yMin, xMax, yMax, i, j, k;
@@ -367,13 +364,12 @@
     }
 
     /*
-        Zeichnet die Rechtecke und die Funktionen gefundener Marker in den Context des Canvas. Die Größe des Rechtecks ist
-        dynamisch und richtet sich nach dem benötigten Platz und der Schriftgröße.
-        @param text Text der Funktion, der geschrieben werden soll.
-        @param x X Position für das Zeichnen.
-        @param y Y Position für das Zeichnen.
-        @param type Zur Kontrolle, von wo diese Funktion augerufen wurde.
-        @param id ID des zugehörigen Markers.
+        Draws the rectangle and the found marker functions into the context of the canvas. The size of the rectangle is dynamic and depends on the space required and the font size.
+        @param text Text of the function to be written.
+        @param x X position for the drawing.
+        @param y Y position for the drawing.
+        @param type For Validation, from where this function was called.
+        @param id ID of the Markers.
     */ 
     function drawRect(text, x, y, type, id){
       var type = type || 0;
@@ -418,15 +414,15 @@
     }
 
     /*
-        Veränder die Farbe der Preview des Farbpickers
-        @param jscolor Farbe aus dem Inupt des Modals.  
+        Change the color of the preview of the color picker
+        @param jscolor Color from the Inupt of the Modal. 
     */ 
     function update(jscolor) {
       document.getElementById('rect').style.backgroundColor = '#' + jscolor
     }
 
     /*
-        Speichert getätigte Veränderungen von Devices in den DBs und dem Smarthome System
+        Saves changes made to devices in the DBs and the Smart Home system
     */ 
     function changeItemData(){
         updateData($('#changeData').val(), items[chosenRect].id, $('#changeData').attr('changeAttr'));

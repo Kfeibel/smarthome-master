@@ -1,6 +1,6 @@
 /*
-	Dummy Interface.js, die alle Daten aus einer vorgefertigten JSON file läd und an die Applikation zurückgibt.
-	Hier würde ein richtiger API Call an eine REST Schnittstelle zu einem Smarthome System stehen.
+	Dummy Interface.js, which loads all data from a prefabricated JSON file and returns it to the application. 
+	Here would be a real API call to a REST interface to a Smart Home system.
 */
 function getAllElements(){
 	var result;

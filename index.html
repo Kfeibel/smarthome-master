@@ -60,8 +60,8 @@
 
 <script>
 /*
-  Wenn das Fenster geladen wird, wird überprüft, ob das Attribut 'alreadyClicked' bereits gesetzt wurde
-  Falls nicht, werden alle Daten für die verwendung geladen und vorbereitet.
+  When the page gets loaded, the global attribute 'alreadyClicked' gets checked, if it is already set.
+  When not, all data gets loaded and handled.
 */
   if (!sessionStorage.alreadyClicked) {
     window.onload = function(){

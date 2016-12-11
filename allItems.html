@@ -58,7 +58,7 @@
 <script>
   var arucoListe = new Array, check = false;
     /* 
-        Wenn das Fenster geladen wird, werden alle Devices mit getAllDevices() aus der lokalen DB geholt und mit createItem() dynmisch angezeigt. Des weiteren wir eine List dmit allen verwendeten ArUco-IDs erstellt.
+        When the page gets loaded, all devices get loaded from the local DB with getAllDevices() and displayed with createItem(). Additionally a list of all used ArUco-IDs gets created.
     */
      window.onload = function(){
         var devices = getAllDevices();
@@ -70,8 +70,8 @@
      } 
 
     /* 
-        Erzeugt dynamisch für ein übergebenes Device(Objekt) ein Element und stellt es auf der Oberfläche dar
-        @param device Objekt eines Gegenstandes mit allen Eigenschaften
+        Creates dynamically an element for a given Device(Objekt) and displays it on the screen.
+        @param device Objekt of a device with its settings
     */
     function createItem(device){
 
@@ -103,10 +103,10 @@
 
 
     /*
-        Öffnet das Modal zum Verändern der ArUco-ID und ruft die Methode zum Zeichnen des alten Markers auf.
-        @param item Item welches die Funktion aufgerufen hat
-        @param name Name des zu verändernden Devices
-        @param itemid ID des zu verändernden Devices
+        Opens the modal for changing the ArUco-ID and calls the function to draw the old marker.
+        @param item Item, which called the function
+        @param name Name of the changed device
+        @param itemid ID of the changed device
     */
     function openModal(item, name, itemid){
         $('.modal-title').text(name);
@@ -118,8 +118,8 @@
     }
 
     /*
-        Zeichnet den Marker zu einer gegebenen ArUco-ID in den vorgegebenen Bereich
-        @param itemId ArUco-ID die gezeichnet werden soll
+        Draws the marker to a givem ArUco-ID in the predetermined area
+        @param itemId ArUco-ID, which should get drawn.
     */
     function drawArucoMarker(itemId){
 
@@ -139,8 +139,8 @@
     }
 
     /*
-        Überprüft ob die eingegebene ArUco-ID gültig ist. gültig bedeuted zwischen 0 und 1023 und nicht bereits vergeben
-        @param type Zur Kontrolle, von wo diese Funktion augerufen wurde.
+        Check if the entered ArUco-ID is valid. Valid means: between 0 and 1023 and not taken yet
+        @param type For Validation, from where this function was called.
     */
     function checkID(type){
         var oldid = $('#myModal').attr('arucoid');
@@ -173,7 +173,7 @@
     }
 
     /*
-        Ändert die neu eingestellten ArUco-ID in den DBs
+        Change all new set ArUco-ID in the DBs
     */
     function changeArucoMarker(){
         var itemid = $('#myModal').attr('itemid');
