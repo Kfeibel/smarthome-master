@@ -22,7 +22,6 @@ function initObjects(){
         },
         type: 'GET'
     });
-
     if(dataAPI != null && dataSever != null){                   // If both data are present
         var objResult = findObject(dataAPI, dataSever, 'id');   // Search matching device IDs and adopt their ArUco Marker
         var jsonString = JSON.stringify(objResult) ;
@@ -49,7 +48,7 @@ function updateData(newVal, itemid, field){
     var jsonString = JSON.stringify(jsObject) ;
     localStorage.setItem("jsonString", jsonString);
     store();
-    if (field != 'arucoid') setElementState();
+    if (field != 'arucoid') setElementState(newVal);
 }
 
 /*
